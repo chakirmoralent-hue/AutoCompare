@@ -1,0 +1,2 @@
+# AutoCompare
+Notre plateforme permet aux conducteurs français de comparer les offres de 16 assureurs en moins de 2 minutes grâce à un formulaire en 3 étapes. Chaque utilisateur renseigne son véhicule, son profil conducteur et son niveau de couverture souhaité avant de sélectionner une offre 

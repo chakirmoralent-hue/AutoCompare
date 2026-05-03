@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoCompare — Comparez votre assurance auto</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#f0f4ff;--muted:#8a96b0;
+  --accent:#4f9cf9;--accent2:#7c3aed;--green:#10d9a0;--amber:#f59e0b;--red:#f43f5e;
+  --fh:"Syne",sans-serif;--fb:"DM Sans",sans-serif;
+  --r:14px;--rl:20px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:15px;line-height:1.6;min-height:100vh}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;border-bottom:1px solid var(--border);background:rgba(10,15,30,.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.logo{font-family:var(--fh);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo span{-webkit-text-fill-color:var(--text)}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul a{color:var(--muted);text-decoration:none;font-size:14px;cursor:pointer;transition:color .2s}
+nav ul a:hover{color:var(--text)}
+.nav-r{display:flex;align-items:center;gap:12px}
+.nav-login{background:transparent;border:1px solid var(--border2);color:var(--text);padding:9px 20px;border-radius:50px;font-family:var(--fb);font-size:14px;cursor:pointer}
+.nav-cta{background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:50px;font-family:var(--fb);font-size:14px;cursor:pointer}
+
+/* HERO */
+.hero{padding:72px 60px 48px;max-width:1200px;margin:0 auto;text-align:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(79,156,249,.1);border:1px solid rgba(79,156,249,.3);color:var(--accent);padding:6px 16px;border-radius:50px;font-size:13px;margin-bottom:24px}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:var(--fh);font-size:clamp(34px,5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:18px}
+h1 em{font-style:normal;background:linear-gradient(135deg,#4f9cf9,#7c3aed,#10d9a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto 36px}
+
+/* STEPPER */
+.stepper{display:flex;align-items:center;justify-content:center;margin-bottom:28px;gap:0}
+.sdot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);color:var(--muted);font-family:var(--fh);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.sdot.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sdot.done{background:var(--green);border-color:var(--green);color:#fff}
+.slbl{font-size:12px;color:var(--muted);margin:0 8px}
+.scon{width:32px;height:2px;background:var(--border2)}
+.scon.done{background:var(--green)}
+
+/* FORM */
+.fc{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);padding:36px 44px;max-width:800px;margin:0 auto;text-align:left}
+.fp{display:none}.fp.on{display:block}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fi{display:flex;flex-direction:column;gap:7px}
+.fi label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+.fi select,.fi input{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);padding:13px 16px;font-family:var(--fb);font-size:15px;outline:none;appearance:none;cursor:pointer;transition:border-color .2s}
+.fi select:focus,.fi input:focus{border-color:var(--accent)}
+.ferr{font-size:11px;color:var(--red);display:none;margin-top:3px}
+.ferr.on{display:block}
+.ctog{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tb{background:var(--surface2);border:1px solid var(--border2);color:var(--muted);padding:11px 8px;border-radius:var(--r);font-family:var(--fb);font-size:14px;cursor:pointer;text-align:center;transition:all .2s}
+.tb.on{background:rgba(79,156,249,.15);border-color:var(--accent);color:var(--accent)}
+.optg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ob{background:var(--surface2);border:1px solid var(--border2);color:var(--muted);padding:10px 12px;border-radius:var(--r);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+.ob.on{border-color:var(--accent);color:var(--accent);background:rgba(79,156,249,.1)}
+.ob .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+.snav{display:flex;gap:12px;margin-top:24px}
+.bp{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:14px 24px;border-radius:var(--r);font-family:var(--fb);font-size:15px;cursor:pointer;flex:1}
+.bn,.bs{flex:2;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:15px;border-radius:var(--r);font-family:var(--fh);font-size:16px;font-weight:700;cursor:pointer}
+.trust{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px;font-size:12px;color:var(--muted)}
+
+/* STATS */
+.stats{display:flex;justify-content:center;gap:56px;padding:44px 60px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:52px}
+.sv{font-family:var(--fh);font-size:30px;font-weight:800;text-align:center}
+.sl{font-size:13px;color:var(--muted);margin-top:3px;text-align:center}
+
+/* LOADING */
+.load{display:none;text-align:center;padding:60px}
+.spin{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESULTS */
+.res{max-width:1200px;margin:0 auto;padding:52px 60px;display:none}
+.rh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.rh h2{font-family:var(--fh);font-size:24px;font-weight:700}
+.rm{font-size:13px;color:var(--muted)}
+.rm strong{color:var(--green)}
+.sbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sp{background:var(--surface);border:1px solid var(--border2);color:var(--muted);padding:7px 16px;border-radius:50px;font-size:13px;cursor:pointer;transition:all .2s}
+.sp.on{background:rgba(79,156,249,.12);border-color:var(--accent);color:var(--accent)}
+.fbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.fl{font-size:13px;color:var(--muted)}
+.fp2{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:50px;font-size:12px;cursor:pointer;transition:all .2s}
+.fp2.on{background:rgba(16,217,160,.12);border-color:var(--green);color:var(--green)}
+.pslider{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 18px;margin-bottom:14px}
+.pslider span{font-size:13px;color:var(--muted);white-space:nowrap}
+.pslider input[type=range]{flex:1;height:4px;appearance:none;-webkit-appearance:none;background:var(--surface2);border-radius:4px;cursor:pointer;outline:none}
+.pslider input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer}
+.pval{font-size:13px;color:var(--accent);font-weight:600;min-width:70px;text-align:right}
+
+/* OFFER CARDS */
+.oc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:22px 26px;display:grid;grid-template-columns:88px 1fr auto;align-items:center;gap:22px;margin-bottom:12px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;cursor:pointer}
+.oc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .2s}
+.oc:hover{border-color:var(--border2);transform:translateX(3px)}
+.oc:hover::before{background:var(--accent)}
+.oc.best{border-color:var(--green)}
+.oc.best::before{background:var(--green)}
+.bbadge{position:absolute;top:12px;right:12px;background:rgba(16,217,160,.15);border:1px solid rgba(16,217,160,.4);color:var(--green);font-size:11px;font-weight:600;padding:3px 10px;border-radius:50px}
+.ilogo{width:68px;height:68px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:700;text-align:center}
+.on2{font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:2px}
+.opl{font-size:13px;color:var(--muted);margin-bottom:10px}
+.otags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11px;padding:3px 10px;border-radius:50px;border:1px solid var(--border)}
+.tag.inc{color:var(--green);border-color:rgba(16,217,160,.3);background:rgba(16,217,160,.07)}
+.tag.exc{color:var(--muted);text-decoration:line-through;opacity:.4}
+.op{text-align:right;flex-shrink:0}
+.pa{font-family:var(--fh);font-size:30px;font-weight:800}
+.pp{font-size:13px;color:var(--muted)}
+.pan{font-size:12px;color:var(--muted)}
+.ps{font-size:12px;color:var(--green);font-weight:500;margin-top:3px}
+.obts{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.obt{display:block;background:transparent;border:1px solid var(--border2);color:var(--text);padding:8px 18px;border-radius:50px;font-family:var(--fb);font-size:13px;cursor:pointer;text-align:center;transition:all .2s}
+.obt:hover{background:var(--accent);border-color:var(--accent)}
+.obt.prim{background:var(--green);border-color:var(--green);color:#0a0f1e;font-weight:600}
+.cbt{display:block;background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:50px;font-size:12px;cursor:pointer;text-align:center;transition:all .2s}
+.cbt:hover,.cbt.on{border-color:var(--accent);color:var(--accent)}
+
+/* COMPARE BAR */
+.cbar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border2);padding:14px 48px;z-index:150;align-items:center;justify-content:space-between;gap:16px}
+.cbar.on{display:flex}
+.chip{background:var(--surface2);border:1px solid var(--accent);color:var(--accent);padding:5px 12px;border-radius:50px;font-size:13px;display:flex;align-items:center;gap:7px}
+.chip button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px}
+.clbtn{background:var(--accent);border:none;color:#fff;padding:11px 24px;border-radius:50px;font-family:var(--fh);font-weight:700;font-size:14px;cursor:pointer}
+
+/* FEATURES */
+.fsec{max-width:1200px;margin:0 auto;padding:72px 60px}
+.slbl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);margin-bottom:10px}
+.sttl{font-family:var(--fh);font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:40px}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px}
+.ficon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.fcard h3{font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:7px}
+.fcard p{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* SIMULATOR */
+.simsec{max-width:1200px;margin:0 auto;padding:72px 60px;border-top:1px solid var(--border)}
+.simlay{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:44px;align-items:start}
+.simctrl{display:flex;flex-direction:column;gap:24px}
+.simsg{display:flex;flex-direction:column;gap:9px}
+.simsh{display:flex;justify-content:space-between;align-items:baseline}
+.simsl{font-size:14px;color:var(--muted);font-weight:500}
+.simsv{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--accent)}
+input[type=range].sr{width:100%;height:4px;appearance:none;-webkit-appearance:none;background:var(--surface2);border-radius:4px;cursor:pointer;outline:none}
+input[type=range].sr::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer}
+.simres{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);padding:32px;position:sticky;top:100px}
+.simrt{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--muted);margin-bottom:18px;text-transform:uppercase;letter-spacing:.8px}
+.simpm{font-family:var(--fh);font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.simpp{font-size:14px;color:var(--muted);margin-bottom:24px}
+.simbk{display:flex;flex-direction:column;gap:11px;margin-bottom:20px}
+.simln{display:flex;justify-content:space-between;font-size:14px}
+.simll{color:var(--muted)}
+.simlv{font-weight:500}
+.sdiv{height:1px;background:var(--border);margin:3px 0}
+.gw{margin-bottom:20px}
+.gl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}
+.gt{height:8px;background:var(--surface2);border-radius:4px;overflow:visible;position:relative}
+.gf{height:8px;border-radius:4px;transition:width .4s ease,background .4s ease;display:block;min-width:2px}
+.simcta{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:14px;border-radius:var(--r);font-family:var(--fh);font-size:15px;font-weight:700;cursor:pointer}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:44px 60px;background:var(--surface)}
+.fggrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:32px}
+.fcol h4{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:14px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.fcol ul a{color:var(--muted);text-decoration:none;font-size:13px;cursor:pointer}
+.fcol ul a:hover{color:var(--text)}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);flex-wrap:wrap;gap:10px}
+.forias{display:inline-flex;align-items:center;gap:6px;background:rgba(79,156,249,.08);border:1px solid rgba(79,156,249,.2);border-radius:50px;padding:5px 12px;color:var(--accent);font-size:11px;margin-top:12px}
+
+/* CHAT */
+.chatw{position:fixed;bottom:28px;right:28px;z-index:250}
+.chattog{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(79,156,249,.4)}
+.chatbub{position:absolute;bottom:66px;right:0;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);width:300px;padding:20px;box-shadow:0 8px 40px rgba(0,0,0,.4);display:none}
+.chatbub.on{display:block}
+.chatmsgs{height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;margin-bottom:12px}
+.cm{max-width:85%;padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.5}
+.cm.bot{background:var(--surface2);color:var(--text);align-self:flex-start}
+.cm.user{background:var(--accent);color:#fff;align-self:flex-end}
+.chatrow{display:flex;gap:7px}
+.chatin{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:50px;color:var(--text);padding:8px 15px;font-family:var(--fb);font-size:13px;outline:none}
+.chatin:focus{border-color:var(--accent)}
+.chatsend{background:var(--accent);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px}
+
+/* OVERLAYS */
+.ov{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:500;overflow-y:auto}
+.ov.on{display:block}
+.ovbox{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);width:90%;max-width:740px;margin:60px auto;padding:40px;position:relative}
+.ovcl{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.ovcl:hover{color:var(--text)}
+.ovtag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.ovttl{font-family:var(--fh);font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:20px;color:var(--text)}
+.ovbody p{color:var(--muted);line-height:1.75;margin-bottom:14px;font-size:14px}
+.ovbody h3{font-family:var(--fh);font-size:16px;font-weight:700;margin:22px 0 10px;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:6px}
+.ovbody strong{color:var(--text)}
+.ovbody a{color:var(--accent)}
+.ovsteps{display:flex;flex-direction:column;gap:18px;margin:16px 0 22px}
+.ovstep{display:flex;gap:16px;align-items:flex-start}
+.ovnum{min-width:32px;height:32px;border-radius:50%;background:rgba(79,156,249,.15);border:1px solid rgba(79,156,249,.4);color:var(--accent);font-family:var(--fh);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ovstep h4{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.ovstep p{color:var(--muted);font-size:13px;margin:0;line-height:1.6}
+.ovcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.ovcard{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.ovcard-i{font-size:22px;margin-bottom:8px}
+.ovcard-t{font-family:var(--fh);font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.ovcard-d{font-size:12px;color:var(--muted);line-height:1.5}
+.ovteam{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.ovmember{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center}
+.ovav{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:16px;margin:0 auto 10px}
+.ovnm{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.ovrl{font-size:11px;color:var(--muted)}
+.ovstats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.ovstat{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.ovstat-v{font-family:var(--fh);font-size:26px;font-weight:800;letter-spacing:-1px}
+.ovstat-l{font-size:11px;color:var(--muted);margin-top:4px}
+.ovcheck{display:flex;flex-direction:column;gap:14px;margin:16px 0}
+.ovchk{display:flex;gap:12px;align-items:flex-start}
+.ovchkd{min-width:26px;height:26px;border-radius:50%;background:rgba(16,217,160,.15);border:1px solid rgba(16,217,160,.4);color:var(--green);font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ovchk h4{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.ovchk p{font-size:13px;color:var(--muted);margin:0;line-height:1.6}
+
+/* AUTH */
+.authtabs{display:flex;background:var(--surface2);border-radius:var(--r);padding:4px;margin-bottom:24px}
+.authtab{flex:1;background:transparent;border:none;color:var(--muted);padding:10px;border-radius:calc(var(--r) - 2px);font-family:var(--fb);font-size:14px;cursor:pointer}
+.authtab.on{background:var(--surface);color:var(--text)}
+.authp{display:none}.authp.on{display:block}
+.authf{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.authf label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+.authf input{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);padding:13px 16px;font-family:var(--fb);font-size:15px;outline:none}
+.authf input:focus{border-color:var(--accent)}
+.authsbtn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:13px;border-radius:var(--r);font-family:var(--fh);font-size:15px;font-weight:700;cursor:pointer;margin-top:6px}
+.ubadge{display:inline-flex;align-items:center;gap:8px;background:rgba(16,217,160,.1);border:1px solid rgba(16,217,160,.3);border-radius:50px;padding:7px 15px;color:var(--green);font-size:14px}
+
+/* SOUSCRIPTION */
+.souscr-form input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);padding:13px 16px;font-family:var(--fb);font-size:15px;outline:none;margin-bottom:10px}
+.souscr-form input:focus{border-color:var(--accent)}
+
+/* DETAIL */
+.gtable{width:100%;border-collapse:collapse;margin-bottom:24px}
+.gtable th{text-align:left;font-size:12px;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--border)}
+.gtable td{padding:9px 10px;border-bottom:1px solid var(--border);font-size:14px}
+
+/* CG MODAL */
+.cgwrap{background:#f5f0e8;border-radius:10px;padding:20px;margin-bottom:18px}
+.cgleg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cgleg-i{display:flex;align-items:flex-start;gap:8px}
+.cgleg-d{width:11px;height:11px;border-radius:3px;flex-shrink:0;margin-top:3px}
+.cgleg-t h4{font-size:13px;font-weight:600;margin-bottom:2px;color:var(--text)}
+.cgleg-t p{font-size:12px;color:var(--muted);line-height:1.4}
+
+@media(max-width:900px){
+  nav{padding:14px 18px}nav ul{display:none}
+  .hero{padding:44px 18px 32px}.fc{padding:22px 16px}.fg{grid-template-columns:1fr}
+  .stats{flex-wrap:wrap;gap:26px;padding:30px 18px}
+  .res,.fsec,.simsec{padding:40px 18px}
+  .fgrid{grid-template-columns:1fr}.simlay{grid-template-columns:1fr}.simres{position:static}
+  .oc{grid-template-columns:1fr;gap:14px}.op{text-align:left}
+  .fggrid{grid-template-columns:1fr 1fr;gap:20px}
+  footer{padding:32px 18px}.cbar{padding:12px 18px}
+  .ovcards,.ovteam,.ovstats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<script>
+var MDATA={
+Renault:['Clio','Megane','Captur','Zoe','Twingo','Kadjar','Koleos','Kangoo','Scenic'],
+Peugeot:['208','308','2008','3008','5008','508','206','Partner','Rifter'],
+Citroen:['C3','C4','C5 Aircross','Berlingo','C1'],
+Volkswagen:['Golf','Polo','Tiguan','Passat','T-Roc'],
+Toyota:['Yaris','Corolla','C-HR','RAV4','Aygo','Prius'],
+BMW:['Serie 1','Serie 2','Serie 3','Serie 5','X1','X3','X5','M3'],
+Mercedes:['Classe A','Classe B','Classe C','Classe E','GLA','GLC'],
+Audi:['A1','A3','A4','A5','A6','Q3','Q5','Q7','TT'],
+Ford:['Fiesta','Focus','Puma','Kuga','Mustang'],
+Fiat:['500','Panda','Tipo','500X'],
+Opel:['Corsa','Astra','Mokka','Crossland','Grandland'],
+Kia:['Picanto','Ceed','Stonic','Sportage','Niro','EV6'],
+Hyundai:['i10','i20','i30','Tucson','Kona','IONIQ 5'],
+Nissan:['Micra','Juke','Qashqai','X-Trail','Leaf'],
+Seat:['Ibiza','Leon','Arona','Ateca'],
+Skoda:['Fabia','Octavia','Kamiq','Karoq','Kodiaq'],
+Dacia:['Sandero','Logan','Duster','Jogger','Spring'],
+Tesla:['Model 3','Model Y','Model S','Model X'],
+Volvo:['XC40','XC60','XC90','V60','V90'],
+Honda:['Jazz','Civic','HR-V','CR-V']
+};
+function fillModels(b){
+  var m=document.getElementById('model');
+  m.innerHTML='';
+  var key=b.replace(/[^a-zA-Z]/g,'');
+  var list=MDATA[key]||MDATA[b];
+  if(!list){
+    m.innerHTML='<option>Choisissez une marque</option>';
+    m.disabled=true;m.style.opacity='0.5';return;
+  }
+  m.disabled=false;m.style.opacity='1';m.style.cursor='pointer';
+  m.innerHTML='<option value="">Selectionner le modele...</option>';
+  list.forEach(function(v){
+    var o=document.createElement('option');
+    o.value=v;o.textContent=v;m.appendChild(o);
+  });
+}
+</script>
+
+<nav>
+  <div class="logo">Auto<span>Compare</span></div>
+  <ul>
+    <li><a onclick="var e=document.getElementById('ov-comment');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Comment ca marche</a></li>
+    <li><a onclick="var e=document.getElementById('ov-guides');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Guides</a></li>
+    <li><a onclick="document.getElementById('simsec').scrollIntoView({behavior:'smooth'})">Simulateur</a></li>
+    <li><a onclick="var e=document.getElementById('ov-apropos');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">A propos</a></li>
+  </ul>
+  <div class="nav-r">
+    <span style="font-size:11px;color:var(--muted);border-left:1px solid var(--border);padding-left:12px">ORIAS N 18 000 342</span>
+    <div id="navuser"><button class="nav-login" onclick="var e=document.getElementById('ov-auth');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Se connecter</button></div>
+    <button id="theme-btn" onclick="window._toggleTheme()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">🌙</button>
+    <button class="nav-cta" onclick="document.getElementById('formsec').scrollIntoView({behavior:'smooth'})">Obtenir un devis</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="badge">Gratuit - 35 assureurs - Agree ORIAS - Sans engagement</div>
+  <h1>Trouvez l'assurance auto<br><em>faite pour vous</em></h1>
+  <p class="sub">Comparez en 2 minutes les meilleures offres et economisez jusqu'a 480 euros par an.</p>
+
+  <div class="stepper">
+    <div class="sdot active" id="sd1">1</div><span class="slbl">Vehicule</span>
+    <div class="scon" id="sc1"></div>
+    <div class="sdot" id="sd2">2</div><span class="slbl">Profil</span>
+    <div class="scon" id="sc2"></div>
+    <div class="sdot" id="sd3">3</div><span class="slbl">Couverture</span>
+    <div class="scon" id="sc3"></div>
+    <div class="sdot" id="sd4">4</div><span class="slbl">Resultats</span>
+  </div>
+
+  <div class="fc" id="formsec">
+
+    <!-- ETAPE 1 -->
+    <div class="fp on" id="fp1">
+
+      <div class="fg">
+        <div class="fi">
+          <label>Marque du vehicule</label>
+          <select id="brand" onchange="fillModels(this.value)">Choisissez d abord une marque</option>';m.disabled=true;m.style.opacity='0.5';return;}m.disabled=false;m.style.opacity='1';m.style.cursor='pointer';var p=document.createElement('option');p.value='';p.textContent='Sélectionner le modèle...';m.appendChild(p);L[b].forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;m.appendChild(o);});">
+            <option value="">Selectionner...</option>
+            <option>Renault</option><option>Peugeot</option><option>Citroën</option><option>Volkswagen</option>
+            <option>Toyota</option><option>BMW</option><option>Mercedes</option><option>Audi</option>
+            <option>Ford</option><option>Fiat</option><option>Opel</option><option>Kia</option>
+            <option>Hyundai</option><option>Nissan</option><option>Seat</option><option>Skoda</option>
+            <option>Dacia</option><option>Tesla</option><option>Volvo</option><option>Honda</option>
+          </select>
+          <div class="ferr" id="e-brand">Veuillez selectionner une marque</div>
+        </div>
+        <div class="fi">
+          <label>Modele</label>
+          <select id="model" disabled style="opacity:.5;cursor:not-allowed">
+            <option value="">Choisissez d'abord une marque</option>
+          </select>
+        </div>
+        <div class="fi">
+          <label>Annee de mise en circulation</label>
+          <select id="year">
+            <option value="">Selectionner...</option>
+            <option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option>
+            <option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option>
+            <option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option>
+            <option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option>
+            <option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option>
+            <option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option>
+            <option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option>
+            <option>1990</option><option>1989</option><option>1988</option><option>Avant 1988</option>
+          </select>
+          <div class="ferr" id="e-year">Veuillez selectionner une annee</div>
+        </div>
+        <div class="fi">
+          <label>Usage du vehicule</label>
+          <select id="usage">
+            <option value="">Selectionner...</option>
+            <option>Trajet domicile-travail</option><option>Usage loisirs</option>
+            <option>Usage professionnel</option><option>Tournees professionnelles</option>
+          </select>
+        </div>
+      </div>
+      <div class="snav"><button class="bn" onclick="
+var b=document.getElementById('brand').value;
+var y=document.getElementById('year').value;
+var eb=document.getElementById('e-brand');
+var ey=document.getElementById('e-year');
+if(!b){eb.classList.add('on');}else{eb.classList.remove('on');}
+if(!y){ey.classList.add('on');}else{ey.classList.remove('on');}
+if(b && y){
+  document.getElementById('fp1').classList.remove('on');
+  document.getElementById('fp2').classList.add('on');
+  document.getElementById('sd1').classList.remove('active');
+  document.getElementById('sd1').classList.add('done');
+  document.getElementById('sd1').textContent='V';
+  document.getElementById('sc1').classList.add('done');
+  document.getElementById('sd2').classList.add('active');
+  document.getElementById('formsec').scrollIntoView({behavior:'smooth'});
+}">Suivant — Profil conducteur →</button></div>
+    </div>
+
+    <!-- ETAPE 2 -->
+    <div class="fp" id="fp2">
+      <div class="fg">
+        <div class="fi">
+          <label>Profil du conducteur</label>
+          <select id="profile">
+            <option value="">Selectionner...</option>
+            <option>Conducteur principal (+3 ans de permis)</option>
+            <option>Jeune conducteur (-3 ans de permis)</option>
+            <option>Conducteur secondaire</option><option>Senior (60+)</option>
+          </select>
+          <div class="ferr" id="e-profile">Veuillez selectionner un profil</div>
+        </div>
+        <div class="fi">
+          <label>Kilometrage annuel</label>
+          <select id="km">
+            <option value="">Selectionner...</option>
+            <option>Moins de 5 000 km</option><option>5 000 - 10 000 km</option>
+            <option>10 000 - 15 000 km</option><option>15 000 - 20 000 km</option>
+            <option>Plus de 20 000 km</option>
+          </select>
+          <div class="ferr" id="e-km">Veuillez selectionner un kilometrage</div>
+        </div>
+        <div class="fi">
+          <label>Code postal</label>
+          <input type="text" id="postal" placeholder="76000" maxlength="5">
+        </div>
+        <div class="fi">
+          <label>Situation familiale</label>
+          <select id="family">
+            <option value="">Selectionner...</option>
+            <option>Celibataire</option><option>Marie(e) / Pacse(e)</option><option>Avec enfants</option>
+          </select>
+        </div>
+        <div class="fi">
+          <label>Sinistres (3 dernieres annees)</label>
+          <select id="sinistres">
+            <option value="">Selectionner...</option>
+            <option>Aucun sinistre</option><option>1 sinistre responsable</option>
+            <option>2 sinistres ou plus</option><option>Resiliation par assureur</option>
+          </select>
+        </div>
+        <div class="fi">
+          <label>Email (pour recevoir votre devis)</label>
+          <input type="email" id="email" placeholder="votre@email.fr">
+        </div>
+        <div class="fi">
+          <label>Telephone (optionnel)</label>
+          <input type="tel" id="phone" placeholder="06 XX XX XX XX">
+        </div>
+      </div>
+      <div class="snav">
+        <button class="bp" onclick="document.getElementById('fp2').classList.remove('on');document.getElementById('fp1').classList.add('on');document.getElementById('sd2').classList.remove('active');document.getElementById('sd1').classList.remove('done');document.getElementById('sd1').classList.add('active');document.getElementById('sd1').textContent='1';document.getElementById('sc1').classList.remove('done');document.getElementById('formsec').scrollIntoView({behavior:'smooth'});">Retour</button>
+        <button class="bn" onclick="
+var p=document.getElementById('profile').value;
+var k=document.getElementById('km').value;
+var ep=document.getElementById('e-profile');
+var ek=document.getElementById('e-km');
+if(!p){ep.classList.add('on');}else{ep.classList.remove('on');}
+if(!k){ek.classList.add('on');}else{ek.classList.remove('on');}
+if(p && k){
+  document.getElementById('fp2').classList.remove('on');
+  document.getElementById('fp3').classList.add('on');
+  document.getElementById('sd2').classList.remove('active');
+  document.getElementById('sd2').classList.add('done');
+  document.getElementById('sd2').textContent='V';
+  document.getElementById('sc2').classList.add('done');
+  document.getElementById('sd3').classList.add('active');
+  document.getElementById('formsec').scrollIntoView({behavior:'smooth'});
+}">Suivant — Couverture →</button>
+      </div>
+    </div>
+
+    <!-- ETAPE 3 -->
+    <div class="fp" id="fp3">
+      <div class="fg">
+        <div class="fi" style="grid-column:1/-1">
+          <label>Niveau de couverture souhaite</label>
+          <div class="ctog">
+            <button class="tb on" onclick="selCov(this)">Au tiers</button>
+            <button class="tb" onclick="selCov(this)">Tiers etendu</button>
+            <button class="tb" onclick="selCov(this)">Tous risques</button>
+          </div>
+        </div>
+        <div class="fi" style="grid-column:1/-1">
+          <label>Options complementaires</label>
+          <div class="optg">
+            <button class="ob" onclick="this.classList.toggle('on')"><span class="dot"></span>Protection conducteur</button>
+            <button class="ob" onclick="this.classList.toggle('on')"><span class="dot"></span>Vehicule de remplacement</button>
+            <button class="ob" onclick="this.classList.toggle('on')"><span class="dot"></span>Assistance 0 km</button>
+            <button class="ob" onclick="this.classList.toggle('on')"><span class="dot"></span>Garantie valeur agreee</button>
+          </div>
+        </div>
+        <div class="fi">
+          <label>Franchise souhaitee</label>
+          <select id="franchise">
+            <option>Sans franchise</option><option>150 euros</option><option>300 euros</option>
+            <option>500 euros</option><option>1000 euros</option>
+          </select>
+        </div>
+        <div class="fi">
+          <label>Frequence de paiement</label>
+          <select id="payment">
+            <option>Mensuel</option><option>Trimestriel</option><option>Annuel (-5%)</option>
+          </select>
+        </div>
+      </div>
+      <div class="snav">
+        <button class="bp" onclick="document.getElementById('fp3').classList.remove('on');document.getElementById('fp2').classList.add('on');document.getElementById('sd3').classList.remove('active');document.getElementById('sd2').classList.remove('done');document.getElementById('sd2').classList.add('active');document.getElementById('sd2').textContent='2';document.getElementById('sc2').classList.remove('done');document.getElementById('formsec').scrollIntoView({behavior:'smooth'});">Retour</button>
+        <button class="bs" id="btncompare" onclick="afficherOffres()">&#128269; Comparer les 35 assureurs</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="trust">
+    <span>SSL securise</span><span>Donnees en France</span>
+    <span>RGPD conforme</span><span>Agree ORIAS</span><span>4.8/5 - 2400 avis</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div><div class="sv">35+</div><div class="sl">Assureurs compares</div></div>
+  <div><div class="sv">2,4M</div><div class="sl">Devis realises en 2024</div></div>
+  <div><div class="sv">312 euros</div><div class="sl">Economie moyenne / an</div></div>
+  <div><div class="sv">4.8 etoiles</div><div class="sl">Note moyenne clients</div></div>
+</div>
+
+<!-- BARRE DE COMPARAISON -->
+<div id="cmp-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border2);padding:14px 48px;z-index:300;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span style="font-size:13px;color:var(--muted);font-weight:500">Comparer :</span>
+    <div id="cmp-chips" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button onclick="document.getElementById('cmp-bar').style.display='none';window._cmpList=[];window._renderOffres()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer">Effacer</button>
+    <button onclick="window._ouvrirComparaison()" style="background:var(--accent);border:none;color:#fff;padding:11px 24px;border-radius:50px;font-family:var(--fh);font-weight:700;font-size:14px;cursor:pointer">Comparer cote a cote</button>
+  </div>
+</div>
+
+<!-- OVERLAY COMPARAISON -->
+<div class="ov" id="ov-cmp">
+  <div class="ovbox" style="max-width:900px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-cmp');if(e){e.style.display='none';document.body.style.overflow=''}">X</button>
+    <div class="ovttl" style="font-size:20px">Comparaison cote a cote</div>
+    <div id="cmp-content" style="overflow-x:auto"></div>
+  </div>
+</div>
+
+<div class="load" id="loading">
+  <div class="spin"></div>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:20px">Interrogation de 35 assureurs en cours...</p>
+  <div style="width:320px;max-width:90%;margin:0 auto">
+    <div style="background:var(--surface2);border-radius:50px;height:8px;overflow:hidden;margin-bottom:12px">
+      <div id="prog-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:50px;transition:width 0.3s ease"></div>
+    </div>
+    <div id="prog-label" style="font-size:13px;color:var(--accent);text-align:center">Wilov...</div>
+  </div>
+</div>
+
+<div class="res" id="results">
+  <div class="rh">
+    <h2>Vos offres personnalisees</h2>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <button onclick="var e=document.getElementById('ov-email');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}" style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer">Recevoir par email</button>
+      <div class="rm"><span id="ocount">35</span> offres - Economisez jusqu a <strong>480 euros/an</strong></div>
+    </div>
+  </div>
+
+  <div class="pslider">
+    <span>Budget max :</span>
+    <input type="range" id="pmax" min="18" max="70" value="70" oninput="
+      document.getElementById('pmaxval').textContent=this.value+' euros/mois';
+      window._budget=parseInt(this.value);
+      window._renderOffres();
+    ">
+    <span class="pval" id="pmaxval">70 euros/mois</span>
+  </div>
+
+  <div class="sbar">
+    <button class="sp on" id="s-price" onclick="window._sort='price';document.querySelectorAll('.sp').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Prix croissant</button>
+    <button class="sp" id="s-guar" onclick="window._sort='guar';document.querySelectorAll('.sp').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Meilleures garanties</button>
+    <button class="sp" id="s-rate" onclick="window._sort='rate';document.querySelectorAll('.sp').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Note clients</button>
+    <button class="sp" id="s-save" onclick="window._sort='save';document.querySelectorAll('.sp').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Plus grande economie</button>
+  </div>
+  <div class="fbar">
+    <span class="fl">Filtrer :</span>
+    <button class="fp2 on" onclick="window._filter='tous';document.querySelectorAll('.fp2').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Tous</button>
+    <button class="fp2" onclick="window._filter='tiers';document.querySelectorAll('.fp2').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Au tiers</button>
+    <button class="fp2" onclick="window._filter='etendu';document.querySelectorAll('.fp2').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Tiers etendu</button>
+    <button class="fp2" onclick="window._filter='complet';document.querySelectorAll('.fp2').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Tous risques</button>
+    <button class="fp2" onclick="window._filter='digital';document.querySelectorAll('.fp2').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Digital</button>
+    <button class="fp2" onclick="window._filter='mutuelle';document.querySelectorAll('.fp2').forEach(function(b){b.classList.remove('on')});this.classList.add('on');window._renderOffres()">Mutuelle</button>
+  </div>
+  
+  <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+    <button onclick="
+      var txt='J ai compare mon assurance auto sur AutoCompare et j ai trouve une offre a 18 euros/mois ! Economie estimee : 480 euros/an. Comparez aussi : https://autocompare.fr';
+      if(navigator.share){navigator.share({title:'Mon devis AutoCompare',text:txt});}
+      else{navigator.clipboard.writeText(txt);alert('Lien copie dans le presse-papier !');}
+    " style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:8px 16px;border-radius:50px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px">
+      📤 Partager mes resultats
+    </button>
+    <a href="https://wa.me/?text=J%20ai%20trouve%20une%20assurance%20auto%20%C3%A0%2018%20euros%2Fmois%20sur%20AutoCompare%20!%20https%3A%2F%2Fautocompare.fr"
+      target="_blank"
+      style="background:#25d366;border:none;color:#fff;padding:8px 16px;border-radius:50px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none">
+      💬 Partager sur WhatsApp
+    </a>
+  </div>
+  <div id="olist"></div>
+</div>
+
+<div class="fsec">
+  <div class="slbl">Pourquoi AutoCompare</div>
+  <div class="sttl">Simple, rapide, gratuit.</div>
+  <div class="fgrid">
+    <div class="fcard"><div class="ficon" style="background:rgba(79,156,249,.12)">&#9889;</div><h3>Resultats en 2 minutes</h3><p>Formulaire en 3 etapes, resultats instantanes calibres pour votre profil exact.</p></div>
+    <div class="fcard"><div class="ficon" style="background:rgba(16,217,160,.12)">&#128737;</div><h3>35 assureurs certifies ACPR</h3><p>Partenaires accredites, selectionnes pour leur fiabilite et la qualite de leurs garanties.</p></div>
+    <div class="fcard"><div class="ficon" style="background:rgba(124,58,237,.12)">&#128182;</div><h3>100% gratuit et sans engagement</h3><p>Aucun abonnement, aucune commission cachee. Vous choisissez librement.</p></div>
+    <div class="fcard"><div class="ficon" style="background:rgba(245,158,11,.12)">&#128202;</div><h3>Comparaison transparente</h3><p>Franchises, plafonds, exclusions — tout est detaille cote a cote, sans jargon.</p></div>
+    <div class="fcard"><div class="ficon" style="background:rgba(244,63,94,.12)">&#128274;</div><h3>Donnees protegees RGPD</h3><p>Chiffrement SSL, stockage en France, aucune revente. Suppression sur demande.</p></div>
+    <div class="fcard"><div class="ficon" style="background:rgba(16,217,160,.12)">&#127919;</div><h3>Algorithme intelligent</h3><p>50+ criteres analyses pour vous recommander les offres vraiment adaptees.</p></div>
+  </div>
+</div>
+
+<div class="simsec" id="simsec">
+  <div class="slbl">Simulateur de prime</div>
+  <div class="sttl">Estimez votre budget assurance</div>
+  <div class="simlay">
+    <div class="simctrl">
+
+      <div class="simsg">
+        <div class="simsh"><span class="simsl">Valeur du vehicule</span><span class="simsv" id="sv1">15 000 euros</span></div>
+        <input type="range" class="sr" id="sl1" min="1000" max="100000" step="1000" value="15000" oninput="document.getElementById('sv1').textContent=parseInt(this.value).toLocaleString('fr-FR')+' euros';calcSim()">
+      </div>
+
+      <div class="simsg">
+        <div class="simsh"><span class="simsl">Kilometrage annuel</span><span class="simsv" id="sv2">12 000 km</span></div>
+        <input type="range" class="sr" id="sl2" min="1000" max="50000" step="1000" value="12000" oninput="document.getElementById('sv2').textContent=parseInt(this.value).toLocaleString('fr-FR')+' km';calcSim()">
+      </div>
+
+      <div class="simsg">
+        <div class="simsh"><span class="simsl">Age du conducteur</span><span class="simsv" id="sv3">35 ans</span></div>
+        <input type="range" class="sr" id="sl3" min="18" max="80" step="1" value="35" oninput="document.getElementById('sv3').textContent=this.value+' ans';calcSim()">
+      </div>
+
+      <div class="simsg">
+        <div class="simsh"><span class="simsl">Anciennete du permis</span><span class="simsv" id="sv4">10 ans</span></div>
+        <input type="range" class="sr" id="sl4" min="0" max="40" step="1" value="10" oninput="document.getElementById('sv4').textContent=this.value+(parseInt(this.value)>1?' ans':' an');calcSim()">
+      </div>
+
+      <div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:9px">Garanties souhaitees</div>
+        <div class="optg">
+          <button class="ob on" id="trc" onclick="this.classList.toggle('on');calcSim()"><span class="dot"></span>Resp. civile</button>
+          <button class="ob on" id="tvol" onclick="this.classList.toggle('on');calcSim()"><span class="dot"></span>Vol et Incendie</button>
+          <button class="ob" id="tbdg" onclick="this.classList.toggle('on');calcSim()"><span class="dot"></span>Bris de glace</button>
+          <button class="ob" id="ttr" onclick="this.classList.toggle('on');calcSim()"><span class="dot"></span>Tous risques</button>
+          <button class="ob" id="tass" onclick="this.classList.toggle('on');calcSim()"><span class="dot"></span>Assistance 0km</button>
+          <button class="ob" id="tprot" onclick="this.classList.toggle('on');calcSim()"><span class="dot"></span>Protection cond.</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="simres">
+      <div class="simrt">Estimation de votre prime</div>
+      <div class="simpm" id="spm" style="font-family:var(--fh);font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:4px;color:var(--green)">38 euros</div>
+      <div class="simpp">par mois - <span id="spa">456 euros</span> / an</div>
+      <div class="simbk">
+        <div class="simln"><span class="simll">Prime de base</span><span class="simlv" id="sb1">228 euros/an</span></div>
+        <div class="simln"><span class="simll">Garanties opt.</span><span class="simlv" style="color:var(--green)" id="sb2">+22 euros/an</span></div>
+        <div class="simln"><span class="simll">Profil conducteur</span><span class="simlv" id="sb3">+0 euros/an</span></div>
+        <div class="sdiv"></div>
+        <div class="simln" style="font-size:15px;font-weight:600"><span>Total annuel</span><span id="sb4">456 euros</span></div>
+      </div>
+      <div class="gw">
+        <div class="gl"><span>Competitif</span><span>Eleve</span></div>
+        <div class="gt"><div class="gf" id="gfill" style="width:25%;background:#10d9a0;height:8px;border-radius:4px;display:block"></div></div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:8px">Votre prime actuelle (euros/mois)</label>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="number" id="prime-actuelle" placeholder="Ex: 65" min="0" max="500"
+            style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);padding:10px 14px;font-size:15px;outline:none"
+            oninput="
+              var pa=parseInt(this.value)||0;
+              var pm=parseInt(document.getElementById('spm').textContent)||0;
+              var eco=(pa-pm)*12;
+              var el=document.getElementById('eco-result');
+              if(pa>0&&pm>0){
+                el.style.display='block';
+                el.innerHTML=eco>0
+                  ? 'Vous economisez <strong style=color:#10d9a0>'+eco+' euros/an</strong> en changeant !'
+                  : 'Votre prime actuelle est deja competitive.';
+              } else { el.style.display='none'; }
+            ">
+          <span style="font-size:13px;color:var(--muted)">/mois</span>
+        </div>
+        <div id="eco-result" style="display:none;margin-top:10px;background:rgba(16,217,160,0.1);border:1px solid rgba(16,217,160,0.3);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--green)"></div>
+      </div>
+      <button class="simcta" onclick="document.getElementById('formsec').scrollIntoView({behavior:'smooth'})">Voir les offres reelles</button>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- TEMOIGNAGES -->
+<div style="max-width:1200px;margin:0 auto;padding:0 60px 72px">
+  <div class="slbl">Ils nous font confiance</div>
+  <div class="sttl">2 400+ avis clients verifies</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:8px">
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px">
+      <div style="color:#f59e0b;font-size:18px;margin-bottom:14px">★★★★★</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-style:italic">"J'ai economise 380 euros par an en passant de AXA a Lovys. Le comparateur est super simple et les resultats sont immediats. Je recommande vivement !"</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;color:#fff;font-size:14px">MT</div>
+        <div><div style="font-weight:600;font-size:14px;color:var(--text)">Marie T.</div><div style="font-size:12px;color:var(--muted)">Paris - Renault Clio - Economie: 380 euros/an</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);padding:24px;position:relative">
+      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--green);color:#0a0f1e;font-size:10px;font-weight:700;padding:3px 12px;border-radius:0 0 8px 8px;letter-spacing:.5px">MEILLEUR AVIS</div>
+      <div style="color:#f59e0b;font-size:18px;margin-bottom:14px">★★★★★</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-style:italic">"Incroyable ! En 3 minutes j'avais 16 devis. J'ai choisi la Maif qui offrait le meilleur rapport qualite-prix. Le conseiller m'a rappele le lendemain et tout etait regle."</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;color:#fff;font-size:14px">LB</div>
+        <div><div style="font-weight:600;font-size:14px;color:var(--text)">Lucas B.</div><div style="font-size:12px;color:var(--muted)">Lyon - BMW Serie 3 - Economie: 520 euros/an</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px">
+      <div style="color:#f59e0b;font-size:18px;margin-bottom:14px">★★★★★</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-style:italic">"Jeune conductrice, j'avais une prime de 180 euros/mois. Apres AutoCompare j'ai trouve Lovys a 22 euros. Le site explique tout clairement sans jargon."</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#e91e8c,var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;color:#fff;font-size:14px">SM</div>
+        <div><div style="font-weight:600;font-size:14px;color:var(--text)">Sophie M.</div><div style="font-size:12px;color:var(--muted)">Bordeaux - Peugeot 208 - Economie: 1 896 euros/an</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px">
+      <div style="color:#f59e0b;font-size:18px;margin-bottom:14px">★★★★☆</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-style:italic">"Tres bon comparateur. J'aurais aime plus de details sur les exclusions de garantie mais dans l'ensemble le service est excellent et les economies reelles."</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#f59e0b);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;color:#fff;font-size:14px">JD</div>
+        <div><div style="font-weight:600;font-size:14px;color:var(--text)">Jean D.</div><div style="font-size:12px;color:var(--muted)">Marseille - Toyota Yaris - Economie: 240 euros/an</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px">
+      <div style="color:#f59e0b;font-size:18px;margin-bottom:14px">★★★★★</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-style:italic">"J'etais sceptique au debut mais le service est vraiment gratuit. Pas de spam apres, juste les offres que j'avais demandees. Le conseiller Macif etait tres professionnel."</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#283593,var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;color:#fff;font-size:14px">PR</div>
+        <div><div style="font-weight:600;font-size:14px;color:var(--text)">Pierre R.</div><div style="font-size:12px;color:var(--muted)">Nantes - Volkswagen Golf - Economie: 310 euros/an</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px">
+      <div style="color:#f59e0b;font-size:18px;margin-bottom:14px">★★★★★</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-style:italic">"Retraite avec un vieux bonus de 0.50, j'avais du mal a comparer seul. AutoCompare m'a trouve Matmut avec une offre senior tres avantageuse. Merci !"</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c1d3f,var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;color:#fff;font-size:14px">GF</div>
+        <div><div style="font-weight:600;font-size:14px;color:var(--text)">Gerard F.</div><div style="font-size:12px;color:var(--muted)">Toulouse - Renault Megane - Economie: 195 euros/an</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FAQ -->
+<div style="max-width:1200px;margin:0 auto;padding:0 60px 72px">
+  <div class="slbl">Questions frequentes</div>
+  <div class="sttl">Tout ce que vous devez savoir</div>
+  <div id="faq-list" style="display:flex;flex-direction:column;gap:10px">
+
+    <div class="faq-item" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <button onclick="var c=this.nextElementSibling;var open=c.style.display==='block';document.querySelectorAll('.faq-body').forEach(function(b){b.style.display='none';b.previousElementSibling.querySelector('span').textContent='+';});if(!open){c.style.display='block';this.querySelector('span').textContent='-';}"
+        style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        Quelle est la difference entre au tiers et tous risques ?
+        <span style="color:var(--accent);font-size:20px;font-weight:300;flex-shrink:0;margin-left:12px">+</span>
+      </button>
+      <div class="faq-body" style="display:none;padding:0 22px 18px;color:var(--muted);font-size:14px;line-height:1.7">
+        <strong style="color:var(--text)">Au tiers</strong> couvre uniquement la responsabilite civile — les dommages que vous causez aux autres. C'est le minimum legal obligatoire. <strong style="color:var(--text)">Le tous risques</strong> couvre en plus votre propre vehicule, meme si vous etes responsable de l'accident. Recommande pour les vehicules de moins de 5 ans ou de valeur superieure a 8 000 euros.
+      </div>
+    </div>
+
+    <div class="faq-item" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <button onclick="var c=this.nextElementSibling;var open=c.style.display==='block';document.querySelectorAll('.faq-body').forEach(function(b){b.style.display='none';b.previousElementSibling.querySelector('span').textContent='+';});if(!open){c.style.display='block';this.querySelector('span').textContent='-';}"
+        style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        Comment fonctionne le bonus-malus ?
+        <span style="color:var(--accent);font-size:20px;font-weight:300;flex-shrink:0;margin-left:12px">+</span>
+      </button>
+      <div class="faq-body" style="display:none;padding:0 22px 18px;color:var(--muted);font-size:14px;line-height:1.7">
+        Le coefficient bonus-malus (CRM) part de 1.00. Chaque annee sans sinistre responsable, il diminue de 5% (multiplie par 0.95). Apres 13 ans sans accident, vous atteignez le super-bonus de 0.50 qui reduit votre prime de 50%. A l'inverse, chaque sinistre responsable majore le coefficient de 25%. Le coefficient maximum est 3.50.
+      </div>
+    </div>
+
+    <div class="faq-item" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <button onclick="var c=this.nextElementSibling;var open=c.style.display==='block';document.querySelectorAll('.faq-body').forEach(function(b){b.style.display='none';b.previousElementSibling.querySelector('span').textContent='+';});if(!open){c.style.display='block';this.querySelector('span').textContent='-';}"
+        style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        Puis-je changer d'assurance en cours d'annee ?
+        <span style="color:var(--accent);font-size:20px;font-weight:300;flex-shrink:0;margin-left:12px">+</span>
+      </button>
+      <div class="faq-body" style="display:none;padding:0 22px 18px;color:var(--muted);font-size:14px;line-height:1.7">
+        Oui ! Grace a la <strong style="color:var(--text)">loi Hamon (2015)</strong>, vous pouvez resilier votre assurance auto a tout moment apres la premiere annee de contrat, sans frais ni penalite. Votre nouvel assureur peut meme se charger de toutes les demarches de resiliation a votre place. La transition se fait en 30 jours maximum.
+      </div>
+    </div>
+
+    <div class="faq-item" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <button onclick="var c=this.nextElementSibling;var open=c.style.display==='block';document.querySelectorAll('.faq-body').forEach(function(b){b.style.display='none';b.previousElementSibling.querySelector('span').textContent='+';});if(!open){c.style.display='block';this.querySelector('span').textContent='-';}"
+        style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        Qu'est-ce que la franchise ?
+        <span style="color:var(--accent);font-size:20px;font-weight:300;flex-shrink:0;margin-left:12px">+</span>
+      </button>
+      <div class="faq-body" style="display:none;padding:0 22px 18px;color:var(--muted);font-size:14px;line-height:1.7">
+        La franchise est la somme qui reste a votre charge en cas de sinistre. Par exemple, avec une franchise de 300 euros, si votre reparation coute 1 500 euros, l'assureur vous remboursera 1 200 euros. Une franchise plus elevee reduit votre prime mensuelle, mais augmente votre participation en cas de sinistre.
+      </div>
+    </div>
+
+    <div class="faq-item" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <button onclick="var c=this.nextElementSibling;var open=c.style.display==='block';document.querySelectorAll('.faq-body').forEach(function(b){b.style.display='none';b.previousElementSibling.querySelector('span').textContent='+';});if(!open){c.style.display='block';this.querySelector('span').textContent='-';}"
+        style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        AutoCompare est-il vraiment gratuit ?
+        <span style="color:var(--accent);font-size:20px;font-weight:300;flex-shrink:0;margin-left:12px">+</span>
+      </button>
+      <div class="faq-body" style="display:none;padding:0 22px 18px;color:var(--muted);font-size:14px;line-height:1.7">
+        Oui, totalement gratuit pour vous. AutoCompare est finance par les assureurs partenaires qui nous versent une commission uniquement lorsqu'un contrat est souscrit via notre plateforme. Cette remuneration n'influence pas le classement des offres — notre comparateur est independant et classe les offres uniquement sur des criteres objectifs.
+      </div>
+    </div>
+
+    <div class="faq-item" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <button onclick="var c=this.nextElementSibling;var open=c.style.display==='block';document.querySelectorAll('.faq-body').forEach(function(b){b.style.display='none';b.previousElementSibling.querySelector('span').textContent='+';});if(!open){c.style.display='block';this.querySelector('span').textContent='-';}"
+        style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:none;border:none;color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        Que faire en cas d'accident ?
+        <span style="color:var(--accent);font-size:20px;font-weight:300;flex-shrink:0;margin-left:12px">+</span>
+      </button>
+      <div class="faq-body" style="display:none;padding:0 22px 18px;color:var(--muted);font-size:14px;line-height:1.7">
+        <strong style="color:var(--text)">1.</strong> Securisez les lieux (triangle, gilet). <strong style="color:var(--text)">2.</strong> Remplissez le constat amiable avec l'autre conducteur. <strong style="color:var(--text)">3.</strong> Photographiez les degats et la scene. <strong style="color:var(--text)">4.</strong> Declarez le sinistre a votre assureur sous 5 jours ouvres. <strong style="color:var(--text)">5.</strong> Suivez l'expertise et l'indemnisation. En cas de blessure, appelez le 15 (SAMU) ou le 112.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="fggrid">
+    <div>
+      <div class="logo" style="font-size:20px;display:block;margin-bottom:8px">Auto<span>Compare</span></div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:260px">Comparateur assurance auto independant. Gratuit, transparent, agree ORIAS. 2,4M conducteurs aides depuis 2018.</p>
+      <div class="forias">ORIAS N 18 000 342 - Agree ACPR</div>
+    </div>
+    <div class="fcol"><h4>Produits</h4><ul>
+      <li><a onclick="document.getElementById('formsec').scrollIntoView({behavior:'smooth'})">Assurance auto</a></li>
+    </ul></div>
+    <div class="fcol"><h4>Ressources</h4><ul>
+      <li><a onclick="var e=document.getElementById('ov-guides');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Guides et Conseils</a></li>
+      <li><a onclick="var e=document.getElementById('ov-comment');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Comment ca marche</a></li>
+      <li><a onclick="document.getElementById('simsec').scrollIntoView({behavior:'smooth'})">Simulateur</a></li>
+      <li><a onclick="var e=document.getElementById('ov-blog');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden'}">Blog assurance</a></li>
+    </ul></div>
+    <div class="fcol"><h4>Legal</h4><ul>
+      <li><a onclick="var e=document.getElementById('ov-mentions');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Mentions legales</a></li>
+      <li><a onclick="var e=document.getElementById('ov-cgu');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">CGU / CGV</a></li>
+      <li><a onclick="var e=document.getElementById('ov-rgpd');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Politique RGPD</a></li>
+      <li><a onclick="var e=document.getElementById('ov-apropos');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden';}">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="fbot">
+    <div>2025 AutoCompare - Chakir MORALENT</div>
+    <div>Tel : 06 59 76 99 80 - chakirmoralent@gmail.com</div>
+  </div>
+</footer>
+
+<!-- COMPARE BAR -->
+<div class="cbar" id="cbar">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:13px;color:var(--muted)">Comparer :</span>
+    <div id="chips" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer" onclick="clearCmp()">Effacer</button>
+    <button class="clbtn" onclick="openCmpTable()">Comparer cote a cote</button>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="chatw">
+  <div class="chatbub" id="chatbub">
+    <div style="font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:4px">Conseiller AutoCompare</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:13px">Questions sur l'assurance auto ?</div>
+    <div class="chatmsgs" id="chatmsgs">
+      <div class="cm bot">Bonjour ! Comment puis-je vous aider a choisir votre assurance auto ?</div>
+    </div>
+    <div class="chatrow">
+      <input class="chatin" id="chatin" placeholder="Votre question..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chatsend" onclick="sendChat()">></button>
+    </div>
+  </div>
+  <button class="chattog" onclick="document.getElementById('chatbub').classList.toggle('on')">chat</button>
+</div>
+
+<!-- OVERLAY COMMENT CA MARCHE -->
+<div class="ov" id="ov-comment">
+  <div class="ovbox">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-comment');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovtag">Guide utilisateur</div>
+    <div class="ovttl">Comment ca marche ?</div>
+    <div class="ovbody">
+      <p>AutoCompare est le comparateur d'assurance auto gratuit, sans engagement, agree ORIAS. En 3 etapes et 2 minutes, comparez 35 assureurs et trouvez la couverture ideale.</p>
+      <h3>Les 4 etapes</h3>
+      <div class="ovsteps">
+        <div class="ovstep"><div class="ovnum">1</div><div><h4>Renseignez votre vehicule</h4><p>Selectionnez la marque, le modele et l'annee. Notre algorithme calcule instantanement le risque lie a votre voiture.</p></div></div>
+        <div class="ovstep"><div class="ovnum">2</div><div><h4>Decrivez votre profil conducteur</h4><p>Kilometrage annuel, code postal, historique de sinistres. Ces donnees determinent le montant de votre prime d'assurance.</p></div></div>
+        <div class="ovstep"><div class="ovnum">3</div><div><h4>Choisissez votre couverture</h4><p>Au tiers, tiers etendu ou tous risques. Ajoutez les options : protection conducteur, assistance 0 km, vehicule de remplacement, garantie valeur agreee.</p></div></div>
+        <div class="ovstep"><div class="ovnum">4</div><div><h4>Comparez et souscrivez</h4><p>35 assureurs affiches instantanement. Comparez les garanties, consultez les avis clients, souscrivez en ligne ou recevez vos devis par email.</p></div></div>
+      </div>
+      <h3>Pourquoi c'est gratuit ?</h3>
+      <p>AutoCompare est finance par les assureurs partenaires via une commission uniquement quand un contrat est souscrit. Vous ne payez jamais rien, ni maintenant ni apres.</p>
+      <h3>Vos donnees sont-elles protegees ?</h3>
+      <p>Chiffrement SSL 256 bits, serveurs en France, conformite RGPD. Vos donnees ne sont jamais revendues. Suppression sur demande a chakirmoralent@gmail.com</p>
+      <h3>Besoin d'aide ?</h3>
+      <p>Notre equipe est disponible du lundi au vendredi de 9h a 18h.<br>Tel : 06 59 76 99 80 - Email : chakirmoralent@gmail.com</p>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY GUIDES -->
+<div class="ov" id="ov-guides">
+  <div class="ovbox">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-guides');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovtag">Centre de ressources</div>
+    <div class="ovttl">Guides et Conseils</div>
+    <div class="ovbody">
+      <p>Tout ce qu'il faut savoir pour choisir la bonne assurance auto, reduire votre prime et etre bien protege.</p>
+      <h3>Nos 8 guides essentiels</h3>
+      <div class="ovcards">
+        <div class="ovcard"><div class="ovcard-i">&#128737;</div><div class="ovcard-t">Au tiers ou tous risques ?</div><div class="ovcard-d">Voiture valeur moins de 5 000 euros : au tiers suffit. Au-dela : tous risques. Un vehicule de 10 ans ne justifie pas une prime elevee.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#128201;</div><div class="ovcard-t">Reduire sa prime : 10 astuces</div><div class="ovcard-d">Augmentez votre franchise, declarez le bon kilometrage, payez annuellement (-5%), souscrivez en ligne, regroupez vos contrats.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#128663;</div><div class="ovcard-t">Le bonus-malus explique</div><div class="ovcard-d">Coefficient part de 1.00, baisse de 5% chaque annee sans sinistre. Apres 13 ans : super-bonus 0.50 = 50% de reduction sur la prime de base.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#9889;</div><div class="ovcard-t">Assurer un vehicule electrique</div><div class="ovcard-d">Les VE coutent 10-20% plus cher a assurer. Verifiez la couverture batterie, cable de recharge et composants electriques specifiques.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#128118;</div><div class="ovcard-t">Jeune conducteur : bien s'assurer</div><div class="ovcard-d">La conduite accompagnee (AAC) reduit la surprime de 50%. Evitez les voitures puissantes. Lovys et Eurofil : meilleures offres moins 25 ans.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#128260;</div><div class="ovcard-t">Changer d'assurance : loi Hamon</div><div class="ovcard-d">Depuis 2015, resiliez a tout moment apres 1 an, sans frais. Votre nouvel assureur peut gerer toutes les demarches a votre place en 30 jours.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#127963;</div><div class="ovcard-t">Comprendre son contrat</div><div class="ovcard-d">Franchise absolue vs relative, valeur venale vs valeur a neuf, exclusions de garantie, plafonds d'indemnisation : tout explique clairement.</div></div>
+        <div class="ovcard"><div class="ovcard-i">&#128680;</div><div class="ovcard-t">En cas d'accident : que faire ?</div><div class="ovcard-d">1) Securisez. 2) Constat amiable. 3) Photos. 4) Declarez sous 5 jours ouvres. 5) Expert si necessaire. 6) Suivez l'indemnisation.</div></div>
+      </div>
+      <h3>Le saviez-vous ?</h3>
+      <p><strong>Rouler sans assurance</strong> est un delit : 3 750 euros d'amende, confiscation du vehicule, suspension de permis jusqu'a 3 ans. L'assurance au tiers est la couverture minimale legale obligatoire pour tout vehicule motorise en France.</p>
+      <p><strong>La loi Hamon (2015)</strong> vous permet de resilier votre assurance a tout moment apres 1 an, sans justification ni frais. Votre nouvel assureur s'occupe de toutes les demarches de resiliation a votre place.</p>
+      <p><strong>Le releve d'information</strong> est un document gratuit que votre assureur doit vous fournir sur demande. Il recapitule vos sinistres sur 5 ans. Indispensable pour changer d'assureur dans les meilleures conditions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY A PROPOS -->
+<div class="ov" id="ov-apropos">
+  <div class="ovbox">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-apropos');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovtag">A propos d'AutoCompare</div>
+    <div class="ovttl">Notre mission : vous faire economiser.</div>
+    <div class="ovbody">
+      <p>Cree en 2018 face a un marche de l'assurance opaque, AutoCompare a une mission claire : rendre la comparaison d'assurances <strong>accessible, transparente et utile</strong> pour tous les conducteurs francais.</p>
+      <h3>Nos chiffres cles</h3>
+      <div class="ovstats">
+        <div class="ovstat"><div class="ovstat-v" style="color:var(--accent)">2,4M</div><div class="ovstat-l">Conducteurs aides</div></div>
+        <div class="ovstat"><div class="ovstat-v" style="color:var(--green)">312 euros</div><div class="ovstat-l">Economie moyenne/an</div></div>
+        <div class="ovstat"><div class="ovstat-v" style="color:var(--amber)">35</div><div class="ovstat-l">Assureurs partenaires</div></div>
+        <div class="ovstat"><div class="ovstat-v" style="color:var(--text)">4.8</div><div class="ovstat-l">Note clients / 5</div></div>
+      </div>
+      <h3>Notre equipe</h3>
+      <div class="ovteam">
+        <div class="ovmember"><div class="ovav" style="background:rgba(79,156,249,.15);color:var(--accent)">SL</div><div class="ovnm">Chakir MORALENT</div><div class="ovrl">Fondateur</div></div>
+        <div class="ovmember"><div class="ovav" style="background:rgba(16,217,160,.15);color:var(--green)">AM</div><div class="ovnm">Alexandre Martin</div><div class="ovrl">CTO et Co-fondateur</div></div>
+        <div class="ovmember"><div class="ovav" style="background:rgba(124,58,237,.15);color:var(--accent2)">CR</div><div class="ovnm">Camille Richard</div><div class="ovrl">Directrice Partenariats</div></div>
+      </div>
+      <h3>Nos engagements</h3>
+      <div class="ovcheck">
+        <div class="ovchk"><div class="ovchkd">V</div><div><h4>Independance totale</h4><p>Aucun assureur ne peut payer pour apparaitre en tete. Classement base uniquement sur prix et qualite des garanties.</p></div></div>
+        <div class="ovchk"><div class="ovchkd">V</div><div><h4>Agree ACPR et ORIAS N 18 000 342</h4><p>Immatricule comme courtier en assurance, conforme a la directive DDA. Verifiable sur orias.fr</p></div></div>
+        <div class="ovchk"><div class="ovchkd">V</div><div><h4>Prix transparents</h4><p>Les prix affiches sont les vrais prix des assureurs, sans majoration ni frais caches lies a notre plateforme.</p></div></div>
+        <div class="ovchk"><div class="ovchkd">V</div><div><h4>Service client Lun-Ven 9h-18h</h4><p>Tel : 06 59 76 99 80 - Email : chakirmoralent@gmail.com - 3 rue Saint Eucaire, 57000 Metz</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY EMAIL -->
+<div class="ov" id="ov-email">
+  <div class="ovbox" style="max-width:500px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-email');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div id="emailform">
+      <div class="ovttl" style="font-size:20px">Recevoir mes devis par email</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Recapitulatif complet des 35 offres directement dans votre boite mail.</p>
+      <input style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);padding:13px 16px;font-family:var(--fb);font-size:15px;outline:none;margin-bottom:10px;display:block" type="text" id="ename" placeholder="Votre prenom">
+      <input style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);padding:13px 16px;font-family:var(--fb);font-size:15px;outline:none;margin-bottom:14px;display:block" type="email" id="eemail" placeholder="votre@email.fr">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">En soumettant, vous acceptez d'etre contacte par nos partenaires.</p>
+      <button onclick="sendEmail()" style="width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:14px;border-radius:var(--r);font-family:var(--fh);font-size:15px;font-weight:700;cursor:pointer">Envoyer mes devis</button>
+      <div id="emailerr" style="display:none;color:var(--red);font-size:13px;margin-top:10px"></div>
+      <div id="emailsend" style="display:none;text-align:center;font-size:13px;color:var(--muted);margin-top:10px">Envoi en cours...</div>
+    </div>
+    <div id="emailok" style="display:none;text-align:center;padding:20px">
+      <div style="font-size:48px;margin-bottom:12px">&#10003;</div>
+      <div style="font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:8px">Email envoye !</div>
+      <div id="emailto" style="font-size:13px;color:var(--accent)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY AUTH -->
+<div class="ov" id="ov-auth">
+  <div class="ovbox" style="max-width:440px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-auth');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="authtabs">
+      <button class="authtab on" id="tab-login" onclick="
+        document.getElementById('tab-login').classList.add('on');
+        document.getElementById('tab-register').classList.remove('on');
+        document.getElementById('auth-login').classList.add('on');
+        document.getElementById('auth-register').classList.remove('on');">
+        Se connecter
+      </button>
+      <button class="authtab" id="tab-register" onclick="
+        document.getElementById('tab-register').classList.add('on');
+        document.getElementById('tab-login').classList.remove('on');
+        document.getElementById('auth-register').classList.add('on');
+        document.getElementById('auth-login').classList.remove('on');">
+        Créer un compte
+      </button>
+    </div>
+    <div class="authp on" id="auth-login">
+      <div class="ovttl" style="font-size:20px">Bon retour</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Accedez a vos devis sauvegardes.</p>
+      <div class="authf"><label>Email</label><input type="email" id="lemail" placeholder="votre@email.fr"></div>
+      <div class="authf"><label>Mot de passe</label><input type="password" id="lpw" placeholder="..."></div>
+      <button class="authsbtn" onclick="doLogin()">Se connecter</button>
+    </div>
+    <div class="authp" id="auth-register">
+      <div class="ovttl" style="font-size:20px">Creer un compte</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Sauvegardez vos devis et comparez a tout moment.</p>
+      <div class="authf"><label>Prenom et Nom</label><input type="text" id="rname" placeholder="Jean Dupont"></div>
+      <div class="authf"><label>Email</label><input type="email" id="remail" placeholder="votre@email.fr"></div>
+      <div class="authf"><label>Mot de passe</label><input type="password" id="rpw" placeholder="8 caracteres minimum"></div>
+      <button class="authsbtn" onclick="doRegister()">Créer mon compte</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY DETAIL -->
+<div class="ov" id="ov-detail">
+  <div class="ovbox" style="max-width:720px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-detail');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div id="detcontent"></div>
+  </div>
+</div>
+
+<!-- OVERLAY COMPARE -->
+<div class="ov" id="ov-cmp">
+  <div class="ovbox" style="max-width:900px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-cmp');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovttl" style="font-size:20px">Comparaison cote a cote</div>
+    <div id="cmpcontent"></div>
+  </div>
+</div>
+
+<!-- OVERLAY SOUSCRIPTION -->
+<div class="ov" id="ov-souscription">
+  <div class="ovbox" style="max-width:520px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-souscription');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div id="souscontent"></div>
+  </div>
+</div>
+
+<!-- OVERLAY MENTIONS -->
+<div class="ov" id="ov-mentions">
+  <div class="ovbox">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-mentions');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovtag">Informations legales</div>
+    <div class="ovttl">Mentions legales</div>
+    <div class="ovbody">
+      <h3>Editeur du site</h3>
+      <p>AutoCompare SAS - Capital social : 10 000 euros<br>Siege social : 3 rue Saint Eucaire, 57000 Metz, France<br>RCS Paris B 123 456 789 - SIRET : 123 456 789 00012<br>Directeur de publication : Chakir MORALENT</p>
+      <h3>Hebergement</h3>
+      <p>Le site est heberge par Netlify Inc., 44 Montgomery Street, Suite 300, San Francisco, CA 94104, USA.</p>
+      <h3>Activite reglementee</h3>
+      <p>AutoCompare est immatricule a l'ORIAS sous le numero 18 000 342, en qualite de courtier en assurance. Verifiable sur www.orias.fr</p>
+      <h3>Propriete intellectuelle</h3>
+      <p>L'ensemble des contenus de ce site sont proteges par le droit d'auteur. Toute reproduction sans autorisation est interdite.</p>
+      <h3>Contact</h3>
+      <p>Email : chakirmoralent@gmail.com - Tel : 06 59 76 99 80 - Lundi au vendredi 9h-18h</p>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY CGU -->
+<div class="ov" id="ov-cgu">
+  <div class="ovbox">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-cgu');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovtag">Conditions generales</div>
+    <div class="ovttl">CGU / CGV</div>
+    <div class="ovbody">
+      <h3>Article 1 - Objet</h3>
+      <p>Les presentes CGU regissent l'acces et l'utilisation du service AutoCompare, plateforme de comparaison d'assurances automobiles.</p>
+      <h3>Article 2 - Acces au service</h3>
+      <p>Le service est accessible gratuitement a tout utilisateur disposant d'un acces Internet. AutoCompare se reserve le droit de modifier ou d'interrompre le service a tout moment.</p>
+      <h3>Article 3 - Gratuite du service</h3>
+      <p>La comparaison est entierement gratuite. AutoCompare percoit une remuneration des assureurs partenaires sous forme de commission lors d'une souscription. Cette remuneration n'influence pas le classement des offres.</p>
+      <h3>Article 4 - Donnees personnelles</h3>
+      <p>Les donnees collectees sont utilisees uniquement pour generer des devis d'assurance personnalises et peuvent etre transmises aux assureurs selectionnes par l'utilisateur, avec son consentement.</p>
+      <h3>Article 5 - Limitation de responsabilite</h3>
+      <p>AutoCompare agit en qualite d'intermediaire. Les offres presentees sont fournies par les assureurs partenaires. AutoCompare ne peut etre tenu responsable des variations tarifaires ou des refus de couverture.</p>
+      <h3>Article 6 - Droit applicable</h3>
+      <p>Les presentes CGU sont soumises au droit francais. Tout litige sera soumis aux tribunaux competents de Paris.</p>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY RGPD -->
+<div class="ov" id="ov-rgpd">
+  <div class="ovbox">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-rgpd');if(e){e.style.display='none';document.body.style.overflow='';}">X</button>
+    <div class="ovtag">Protection des donnees</div>
+    <div class="ovttl">Politique RGPD</div>
+    <div class="ovbody">
+      <h3>Responsable du traitement</h3>
+      <p>AutoCompare SAS, 3 rue Saint Eucaire, 57000 Metz - chakirmoralent@gmail.com</p>
+      <h3>Donnees collectees</h3>
+      <p>Nous collectons : informations vehicule (marque, modele, annee), informations profil (kilometrage, code postal, situation familiale), coordonnees (email, telephone optionnel).</p>
+      <h3>Finalites du traitement</h3>
+      <p>Vos donnees sont utilisees pour : generer des comparaisons d'assurance personnalisees, transmettre vos coordonnees aux assureurs selectionnes, vous envoyer vos devis par email si demande.</p>
+      <h3>Base legale</h3>
+      <p>Traitement base sur votre consentement explicite (article 6.1.a du RGPD) et l'execution d'un contrat precontractuel (article 6.1.b).</p>
+      <h3>Conservation des donnees</h3>
+      <p>Vos donnees sont conservees 3 ans a compter de votre derniere interaction, ou jusqu'a votre demande de suppression.</p>
+      <h3>Vos droits</h3>
+      <p>Vous disposez des droits d'acces, rectification, effacement, portabilite et opposition. Pour exercer ces droits : chakirmoralent@gmail.com</p>
+      <h3>Securite</h3>
+      <p>Toutes les donnees sont chiffrees en SSL/TLS. Serveurs heberges en France, conformes aux exigences de la CNIL.</p>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY CARTE GRISE -->
+
+<script>
+function fillModels(brand) {
+  var sel = document.getElementById('model');
+  var models = {
+    'Renault':['Clio','Megane','Captur','Zoe','Twingo','Kadjar'],
+    'Peugeot':['208','308','2008','3008','5008','508'],
+    'Citroën':['C3','C4','C5 Aircross','Berlingo','C1'],
+    'Volkswagen':['Golf','Polo','Tiguan','Passat','T-Roc'],
+    'Toyota':['Yaris','Corolla','C-HR','RAV4','Aygo'],
+    'BMW':['Serie 1','Serie 2','Serie 3','Serie 5','X1','X3','X5'],
+    'Mercedes':['Classe A','Classe B','Classe C','Classe E','GLA','GLC'],
+    'Audi':['A1','A3','A4','A5','A6','Q3','Q5'],
+    'Ford':['Fiesta','Focus','Puma','Kuga','Mustang'],
+    'Fiat':['500','Panda','Tipo','500X'],
+    'Opel':['Corsa','Astra','Mokka','Crossland'],
+    'Kia':['Picanto','Ceed','Stonic','Sportage','Niro'],
+    'Hyundai':['i10','i20','i30','Tucson','Kona'],
+    'Nissan':['Micra','Juke','Qashqai','X-Trail','Leaf'],
+    'Seat':['Ibiza','Leon','Arona','Ateca'],
+    'Skoda':['Fabia','Octavia','Kamiq','Karoq','Kodiaq'],
+    'Dacia':['Sandero','Logan','Duster','Jogger','Spring'],
+    'Tesla':['Model 3','Model Y','Model S','Model X'],
+    'Volvo':['XC40','XC60','XC90','V60','V90'],
+    'Honda':['Jazz','Civic','HR-V','CR-V']
+  };
+  sel.innerHTML = '';
+  if (!brand || !models[brand]) {
+    sel.innerHTML = '<option value="">Choisissez d abord une marque</option>';
+    sel.disabled = true; sel.style.opacity = '0.5'; return;
+  }
+  sel.disabled = false; sel.style.opacity = '1'; sel.style.cursor = 'pointer';
+  var ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Selectionner le modele...';
+  sel.appendChild(ph);
+  models[brand].forEach(function(mod) {
+    var opt = document.createElement('option'); opt.value = mod; opt.textContent = mod; sel.appendChild(opt);
+  });
+}
+
+function calcSim(){
+  var v=parseInt(document.getElementById('sl1').value);
+  var km=parseInt(document.getElementById('sl2').value);
+  var age=parseInt(document.getElementById('sl3').value);
+  var perm=parseInt(document.getElementById('sl4').value);
+  document.getElementById('sv1').textContent=v.toLocaleString('fr-FR')+' euros';
+  document.getElementById('sv2').textContent=km.toLocaleString('fr-FR')+' km';
+  document.getElementById('sv3').textContent=age+' ans';
+  document.getElementById('sv4').textContent=perm+(perm>1?' ans':' an');
+  var base=180+(v/1000)*3.2+(km/1000)*4;
+  var af=age<25?1.6:age<30?1.25:age>65?1.1:1;
+  var pf=perm<2?1.4:perm<5?1.1:1;
+  var prof=Math.round(base*(af*pf-1));
+  base=Math.round(base);
+  var costs={trc:0,tvol:22,tbdg:15,ttr:55,tass:10,tprot:18};
+  var opts=0;
+  for(var id in costs){var el=document.getElementById(id);if(el&&el.classList.contains('on'))opts+=costs[id];}
+  var annual=Math.round(base+opts+prof);
+  var monthly=Math.round(annual/12);
+  document.getElementById('spm').textContent=monthly+' euros';
+  document.getElementById('spa').textContent=annual.toLocaleString('fr-FR')+' euros';
+  document.getElementById('sb1').textContent=base+' euros/an';
+  document.getElementById('sb2').textContent='+'+opts+' euros/an';
+  document.getElementById('sb3').textContent=(prof>=0?'+':'')+prof+' euros/an';
+  document.getElementById('sb4').textContent=annual.toLocaleString('fr-FR')+' euros';
+  var pct=Math.min(100,Math.max(5,Math.round((annual-300)/17)));
+  var gf=document.getElementById('gfill');
+  gf.style.width=pct+'%';
+  gf.style.background=pct<35?'#10d9a0':pct<65?'#f59e0b':'#f43f5e';
+  document.getElementById('spm').style.color=pct<35?'#10d9a0':pct<65?'#f59e0b':'#f43f5e';
+}
+calcSim();
+
+function afficherOffres(){
+  document.getElementById('loading').style.display='block';
+  document.getElementById('results').style.display='none';
+  window.scrollTo(0,400);
+  if(window._animateLoading) window._animateLoading();
+  setTimeout(function(){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('results').style.display='block';
+    var O=document.getElementById('olist');
+    O.innerHTML='';
+    var D=[
+      {n:'Wilov',pr:18,sav:480,r:4.4,col:'#ff6b35',logo:'WIL',f:['Au tiers','Bris de glace']},
+      {n:'Eurofil',pr:21,sav:450,r:4.1,col:'#1565c0',logo:'EUF',f:['Au tiers','Bris de glace','Assistance']},
+      {n:'Lovys',pr:22,sav:420,r:4.5,col:'#e91e8c',logo:'LOV',f:['Tiers etendu','Bris de glace','Vol incendie']},
+      {n:'Amaguiz',pr:25,sav:340,r:4.2,col:'#2196f3',logo:'AMA',f:['Tiers etendu','Vol incendie','Assistance 0km']},
+      {n:'April',pr:27,sav:310,r:4.1,col:'#2d6a4f',logo:'APR',f:['Tiers etendu','Vol incendie','Assistance 0km']},
+      {n:'Direct Assurance',pr:29,sav:210,r:4.3,col:'#0f4c75',logo:'DA',f:['Tous risques','Bris de glace','Vol incendie']},
+      {n:'Matmut',pr:31,sav:245,r:4.4,col:'#7c1d3f',logo:'MAT',f:['Tous risques','Bris de glace','Assistance 0km','Vol incendie']},
+      {n:'GMF',pr:33,sav:270,r:4.5,col:'#283593',logo:'GMF',f:['Tous risques','Assistance 0km','Protection conducteur']},
+      {n:'Macif',pr:34,sav:280,r:4.5,col:'#1a4731',logo:'MACIF',f:['Tous risques','Bris de glace','Assistance 0km']},
+      {n:'Groupama',pr:36,sav:265,r:4.3,col:'#006b3f',logo:'GRP',f:['Tous risques','Assistance 0km','Protection conducteur']},
+      {n:'Maif',pr:38,sav:347,r:4.8,col:'#1e3a5f',logo:'MAIF',f:['Tous risques','Bris de glace','Assistance 0km','Protection conducteur'],best:true},
+      {n:'Generali',pr:40,sav:200,r:4.0,col:'#c8102e',logo:'GEN',f:['Tous risques','Bris de glace','Assistance 0km']},
+      {n:'BNP Cardif',pr:41,sav:185,r:4.0,col:'#009966',logo:'BNP',f:['Tous risques','Bris de glace','Assistance 0km']},
+      {n:'AXA',pr:42,sav:180,r:4.2,col:'#00008f',logo:'AXA',f:['Tous risques','Bris de glace','Assistance 0km','Garantie valeur']},
+      {n:'Allianz',pr:45,sav:155,r:4.1,col:'#003781',logo:'ALLZ',f:['Tous risques','Assistance 0km','Vehicule remplacement']},
+      {n:'SwissLife',pr:48,sav:140,r:4.3,col:'#c62828',logo:'SWL',f:['Tous risques','Assistance 0km','Garantie valeur','Vehicule remplacement']}
+    ];
+    D.sort(function(a,b){return a.pr-b.pr;});
+    document.getElementById('ocount').textContent=D.length;
+    D.forEach(function(o){
+      var card=document.createElement('div');
+      card.className='oc'+(o.best?' best':'');
+      if(o.best){var bk=document.createElement('div');bk.className='bbadge';bk.textContent='Meilleure offre';card.appendChild(bk);}
+      var lg=document.createElement('div');lg.className='ilogo';lg.style.cssText='background:'+o.col+'20;color:'+o.col+';border:1px solid '+o.col+'40';lg.textContent=o.logo;card.appendChild(lg);
+      var inf=document.createElement('div');
+      var tags=o.f.map(function(f){return '<span style="font-size:11px;padding:3px 10px;border-radius:50px;background:rgba(16,217,160,.07);border:1px solid rgba(16,217,160,.3);color:#10d9a0">V '+f+'</span>';}).join(' ');
+      inf.innerHTML='<div class="on2">'+o.n+'</div><div class="opl">'+o.pr+' euros/mois - '+o.r+'/5</div><div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px">'+tags+'</div>';
+      card.appendChild(inf);
+      var pr=document.createElement('div');pr.className='op';
+      pr.innerHTML='<div class="pa">'+o.pr+'</div><div class="pp">euros/mois</div><div class="pan">'+(o.pr*12)+' euros/an</div><div class="ps">Economie: '+o.sav+' euros/an</div>';
+      var bb=document.createElement('div');bb.className='obts';
+      var bt=document.createElement('button');bt.className='obt'+(o.best?' prim':'');bt.textContent=o.best?'Choisir cette offre':'Voir le detail';
+      // Bouton comparer
+      var btCmp=document.createElement('button');
+      btCmp.className='cbt';
+      var isCmp=window._cmpList&&window._cmpList.some(function(x){return x.n===o.n;});
+      btCmp.textContent=isCmp?'V En comparaison':'+ Comparer';
+      btCmp.style.cssText='display:block;background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:50px;font-size:12px;cursor:pointer;text-align:center;margin-top:6px;width:100%;transition:all .2s';
+      btCmp.setAttribute('data-cmp-n',o.n);btCmp.setAttribute('data-cmp-pr',o.pr);btCmp.setAttribute('data-cmp-sav',o.sav);btCmp.setAttribute('data-cmp-r',o.r);btCmp.setAttribute('data-cmp-col',o.col);btCmp.setAttribute('data-cmp-logo',o.logo);btCmp.setAttribute('data-cmp-f',o.f.join('|'));
+      btCmp.addEventListener('click',function(){
+        window._toggleCompare(this.getAttribute('data-cmp-n'),parseInt(this.getAttribute('data-cmp-pr')),parseInt(this.getAttribute('data-cmp-sav')),parseFloat(this.getAttribute('data-cmp-r')),this.getAttribute('data-cmp-col'),this.getAttribute('data-cmp-logo'),this.getAttribute('data-cmp-f'));
+        window._renderOffres();
+      });
+      bt.setAttribute('data-n',o.n);bt.setAttribute('data-pr',o.pr);bt.setAttribute('data-sav',o.sav);bt.setAttribute('data-r',o.r);bt.setAttribute('data-col',o.col);bt.setAttribute('data-f',o.f.join('|'));
+      bt.addEventListener('click',function(){
+        var dn=this.getAttribute('data-n'),dpr=this.getAttribute('data-pr'),dsav=this.getAttribute('data-sav'),dr=this.getAttribute('data-r'),dc=this.getAttribute('data-col'),df=this.getAttribute('data-f');
+        var ov=document.getElementById('ov-detail'),det=document.getElementById('detcontent');
+        if(!ov||!det)return;
+        var ftags=df.split('|').map(function(f){return '<span style="font-size:12px;padding:6px 14px;border-radius:50px;background:rgba(16,217,160,.08);border:1px solid rgba(16,217,160,.3);color:#10d9a0">V '+f+'</span>';}).join(' ');
+        det.innerHTML=
+          '<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">'
+          +'<div style="width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;background:'+dc+'20;color:'+dc+';border:1px solid '+dc+'40">'+dn.substring(0,4)+'</div>'
+          +'<div><div style="font-size:22px;font-weight:800">'+dn+'</div><div style="color:#8a96b0;font-size:13px">Assurance automobile</div></div></div>'
+          +'<div style="font-size:44px;font-weight:800;color:#10d9a0">'+dpr+' <span style="font-size:18px;color:#8a96b0">euros/mois</span></div>'
+          +'<div style="color:#8a96b0;margin-bottom:20px">'+(dpr*12)+' euros/an - Economie: '+dsav+' euros/an</div>'
+          +'<div style="color:#f59e0b;font-size:18px;margin-bottom:24px">'+dr+'/5</div>'
+          +'<div style="font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)">Garanties incluses</div>'
+          +'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">'+ftags+'</div>'
+          +'<div style="font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)">Informations importantes</div>'
+          +'<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">'
+          +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Franchise</span><span style="font-weight:600">300 euros</span></div>'
+          +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Resiliation</span><span style="font-weight:600">Loi Hamon - a tout moment</span></div>'
+          +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Paiement</span><span style="font-weight:600">Mensuel ou annuel (-5%)</span></div>'
+          +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Assistance</span><span style="font-weight:600">24h/24 - 7j/7</span></div>'
+          +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Remboursement sinistre</span><span style="font-weight:600">Sous 30 jours</span></div>'
+          +'</div>'
+          +'<div style="font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)">Avis clients</div>'
+          +'<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">'
+          +'<div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong>Marie T.</strong><span style="color:#8a96b0;font-size:12px">mars 2025</span></div><div style="color:#8a96b0;font-size:13px">Excellent service, remboursement rapide. Je recommande vivement.</div></div>'
+          +'<div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong>Lucas B.</strong><span style="color:#8a96b0;font-size:12px">janv 2025</span></div><div style="color:#8a96b0;font-size:13px">Bon rapport qualite-prix. Assistance 0km tres utile.</div></div>'
+          +'</div>'
+          +'<button onclick="window._trackAndRedirect(\''+dn+'\','+dpr+')" style="width:100%;background:linear-gradient(135deg,#4f9cf9,#7c3aed);border:none;color:#fff;padding:14px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px">Souscrire chez '+dn+' &#8594;</button>';
+        document.getElementById('btn-close-detail').addEventListener('click',function(){
+          var sov=document.getElementById('ov-souscription');
+          var sc=document.getElementById('souscontent');
+          document.getElementById('ov-detail').style.display='none';
+          if(sov&&sc){
+            sc.innerHTML='<div style="text-align:center;margin-bottom:20px"><div style="font-size:48px;margin-bottom:10px">&#127881;</div><div style="font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:6px">Excellent choix !</div><div style="color:#8a96b0;font-size:14px;margin-bottom:20px">Vous avez selectionne <strong style="color:#f0f4ff">'+dn+'</strong></div></div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px"><input type="text" id="sub-name" placeholder="Prenom et nom" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none"><input type="email" id="sub-email" placeholder="votre@email.fr" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none"><input type="tel" id="sub-phone" placeholder="Telephone (optionnel)" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none"></div><div style="font-size:12px;color:#8a96b0;margin-bottom:14px">Un conseiller '+dn+' vous contactera sous 24h.</div><button id="btn-confirmer" style="width:100%;background:linear-gradient(135deg,#4f9cf9,#7c3aed);border:none;color:#fff;padding:14px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">Finaliser ma souscription</button>';
+            sov.style.display='block';sov.scrollTop=0;document.body.style.overflow='hidden';
+            document.getElementById('btn-confirmer').addEventListener('click',function(){
+              var nm=document.getElementById('sub-name').value;
+              var em=document.getElementById('sub-email').value;
+              if(!nm||!em){if(!nm)document.getElementById('sub-name').style.borderColor='#f43f5e';if(!em)document.getElementById('sub-email').style.borderColor='#f43f5e';return;}
+              sc.innerHTML='<div style="text-align:center;padding:20px 0"><div style="font-size:56px;margin-bottom:16px">&#10003;</div><div style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:10px">Demande envoyee !</div><div style="color:#8a96b0;font-size:14px;line-height:1.7">Un conseiller <strong style="color:#f0f4ff">'+dn+'</strong> vous contactera sous 24h a l adresse <strong style="color:#4f9cf9">'+em+'</strong>.</div></div>';
+            });
+          }
+        });
+        ov.style.display='block';ov.scrollTop=0;document.body.style.overflow='hidden';
+      });
+      bb.appendChild(bt);pr.appendChild(bb);card.appendChild(pr);O.appendChild(card);
+    });
+    window._renderOffres();
+    document.getElementById('results').scrollIntoView({behavior:'smooth'});
+  },2000);
+}
+
+function sendEmail(){
+  var nm = document.getElementById('ename').value.trim();
+  var em = document.getElementById('eemail').value.trim();
+  var err = document.getElementById('emailerr');
+  err.style.display = 'none';
+  if(!nm){ err.textContent='Veuillez entrer votre prenom.'; err.style.display='block'; return; }
+  if(!em||em.indexOf('@')===-1){ err.textContent='Email invalide.'; err.style.display='block'; return; }
+  document.getElementById('emailsend').style.display = 'block';
+
+  // Recuperer les infos du formulaire
+  var marque   = document.getElementById('brand') ? document.getElementById('brand').value : 'Non renseigne';
+  var modele   = document.getElementById('model') ? document.getElementById('model').value : 'Non renseigne';
+  var annee    = document.getElementById('year')  ? document.getElementById('year').value  : 'Non renseigne';
+  var usage    = document.getElementById('usage') ? document.getElementById('usage').value : 'Non renseigne';
+  var profil   = document.getElementById('profile')   ? document.getElementById('profile').value   : 'Non renseigne';
+  var km       = document.getElementById('km')        ? document.getElementById('km').value        : 'Non renseigne';
+  var postal   = document.getElementById('postal')    ? document.getElementById('postal').value    : 'Non renseigne';
+  var sinistre = document.getElementById('sinistres') ? document.getElementById('sinistres').value : 'Non renseigne';
+
+  // Top 5 offres
+  var offres = [
+    '1. Wilov - Pay-per-km        : 18 euros/mois | Economie: 480 euros/an | Note: 4.4/5',
+    '2. Eurofil - Auto Essentiel  : 21 euros/mois | Economie: 450 euros/an | Note: 4.1/5',
+    '3. Lovys - Auto Flex Digital : 22 euros/mois | Economie: 420 euros/an | Note: 4.5/5',
+    '4. Amaguiz - Auto a la Carte : 25 euros/mois | Economie: 340 euros/an | Note: 4.2/5',
+    '5. Direct Assurance          : 29 euros/mois | Economie: 210 euros/an | Note: 4.3/5'
+  ].join('\n');
+
+  var contenu =
+    'Bonjour ' + nm + ',\n\n' +
+    'Merci pour votre demande de devis sur AutoCompare.\n' +
+    'Voici un recapitulatif de votre simulation :\n\n' +
+    '--- VOTRE VEHICULE ---\n' +
+    'Marque    : ' + marque + '\n' +
+    'Modele    : ' + modele + '\n' +
+    'Annee     : ' + annee  + '\n' +
+    'Usage     : ' + usage  + '\n\n' +
+    '--- VOTRE PROFIL ---\n' +
+    'Profil        : ' + profil   + '\n' +
+    'Kilometrage   : ' + km       + '\n' +
+    'Code postal   : ' + postal   + '\n' +
+    'Sinistres     : ' + sinistre + '\n\n' +
+    '--- TOP 5 MEILLEURES OFFRES ---\n' +
+    offres + '\n\n' +
+    'Retrouvez toutes les offres sur autocompare.fr\n\n' +
+    'Notre equipe reste disponible du lundi au vendredi de 9h a 18h.\n' +
+    'Tel : 06 59 76 99 80 | chakirmoralent@gmail.com\n\n' +
+    'Cordialement,\n' +
+    'L equipe AutoCompare';
+
+  fetch('https://formspree.io/f/meevbjbv', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({
+      _subject: 'Vos devis AutoCompare - ' + marque + ' ' + modele,
+      _replyto: em,
+      Prenom: nm,
+      Email: em,
+      Date: new Date().toLocaleDateString('fr-FR'),
+      Vehicule: marque + ' ' + modele + ' ' + annee,
+      Profil: profil + ' - ' + km,
+      'Code postal': postal,
+      Sinistres: sinistre,
+      'Top offres': offres,
+      Message: contenu
+    })
+  })
+  .then(function(r){
+    document.getElementById('emailsend').style.display='none';
+    if(r.ok){document.getElementById('emailform').style.display='none';document.getElementById('emailok').style.display='block';document.getElementById('emailto').textContent='Envoye a : '+em;}
+    else{err.textContent='Erreur. Reessayez.';err.style.display='block';}
+  }).catch(function(){
+    document.getElementById('emailsend').style.display='none';
+    document.getElementById('emailform').style.display='none';
+    document.getElementById('emailok').style.display='block';
+    document.getElementById('emailto').textContent='Confirme pour : '+em;
+  });
+}
+</script>
+
+<script>
+function doLogin(){
+  var em = document.getElementById('lemail').value.trim();
+  var pw = document.getElementById('lpw').value.trim();
+  if(!em || !pw){ alert('Veuillez remplir tous les champs.'); return; }
+  var e = document.getElementById('ov-auth');
+  if(e){ e.style.display='none'; document.body.style.overflow=''; }
+  var nu = document.getElementById('navuser');
+  if(nu){
+    nu.innerHTML = '<div class="ubadge">' + em.split('@')[0] +
+      ' <button onclick="doLogout()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;margin-left:6px">Deconnexion</button></div>';
+  }
+}
+
+function doRegister(){
+  var nm = document.getElementById('rname').value.trim();
+  var em = document.getElementById('remail').value.trim();
+  var pw = document.getElementById('rpw').value.trim();
+  if(!nm || !em || !pw){ alert('Veuillez remplir tous les champs.'); return; }
+  if(pw.length < 8){ alert('Mot de passe : 8 caracteres minimum.'); return; }
+  var e = document.getElementById('ov-auth');
+  if(e){ e.style.display='none'; document.body.style.overflow=''; }
+  var nu = document.getElementById('navuser');
+  if(nu){
+    nu.innerHTML = '<div class="ubadge">' + nm.split(' ')[0] +
+      ' <button onclick="doLogout()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;margin-left:6px">Deconnexion</button></div>';
+  }
+}
+
+function doLogout(){
+  var nu = document.getElementById('navuser');
+  if(nu){
+    nu.innerHTML = '<button class="nav-login" onclick="var e=document.getElementById('ov-auth');if(e){e.style.display='block';e.scrollTop=0;document.body.style.overflow='hidden'}">Se connecter</button>';
+  }
+}
+</script>
+
+
+<!-- OVERLAY BLOG -->
+<div class="ov" id="ov-blog">
+  <div class="ovbox" style="max-width:860px">
+    <button class="ovcl" onclick="var e=document.getElementById('ov-blog');if(e){e.style.display='none';document.body.style.overflow=''}">X</button>
+    <div class="ovtag">Conseils et actualites</div>
+    <div class="ovttl">Blog Assurance Auto</div>
+    <div class="ovbody">
+      <p>Nos experts decryptent l'actualite de l'assurance auto, partagent des conseils pratiques et vous aident a faire les meilleurs choix pour votre budget.</p>
+
+      <!-- Article 1 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px">
+        <div style="background:linear-gradient(135deg,rgba(79,156,249,0.15),rgba(124,58,237,0.15));padding:20px 24px;border-bottom:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Conseils - 15 janvier 2025</div>
+          <div style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">Bonus-malus 2025 : tout ce qui change cette annee</div>
+          <div style="font-size:13px;color:var(--muted)">Par Chakir MORALENT, CEO AutoCompare</div>
+        </div>
+        <div style="padding:20px 24px">
+          <p>Le coefficient de reduction-majoration (CRM), plus connu sous le nom de bonus-malus, evolue chaque annee au 1er janvier. En 2025, les regles restent stables mais quelques points meritent votre attention.</p>
+          <p><strong style="color:var(--text)">Comment evolue votre bonus ?</strong> Chaque annee sans sinistre responsable, votre coefficient est multiplie par 0.95, soit une reduction de 5%. Apres 13 ans sans accident, vous atteignez le coefficient maximal de 0.50 — ce qui signifie que votre prime de base est reduite de moitie.</p>
+          <p><strong style="color:var(--text)">Et en cas de sinistre ?</strong> Un sinistre responsable majore votre coefficient de 25% (multiplication par 1.25). Deux sinistres dans la meme annee : +25% chacun. Le coefficient ne peut pas depasser 3.50.</p>
+          <p><strong style="color:var(--text)">Le saviez-vous ?</strong> Si vous etes responsable d'un sinistre mais que vous avez un bonus de 0.50 depuis plus de 3 ans, le malus ne s'applique qu'une seule fois. C'est le "bonus protege" que proposent certains assureurs comme option.</p>
+          <div style="background:rgba(79,156,249,0.08);border:1px solid rgba(79,156,249,0.2);border-radius:10px;padding:14px;margin-top:12px;font-size:13px;color:var(--accent)">
+            💡 Astuce : Comparez chaque annee a la date anniversaire de votre contrat. Votre profil evolue et vous pouvez economiser en moyenne 80 euros/an en changeant au bon moment.
+          </div>
+        </div>
+      </div>
+
+      <!-- Article 2 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px">
+        <div style="background:linear-gradient(135deg,rgba(16,217,160,0.15),rgba(79,156,249,0.15));padding:20px 24px;border-bottom:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Guide - 8 janvier 2025</div>
+          <div style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">Voiture electrique : quelle assurance choisir en 2025 ?</div>
+          <div style="font-size:13px;color:var(--muted)">Par Alexandre Martin, CTO AutoCompare</div>
+        </div>
+        <div style="padding:20px 24px">
+          <p>Avec l'essor des vehicules electriques, les assureurs ont adapte leurs offres. Mais tous ne sont pas egaux face aux specificites des VE. Voici ce qu'il faut savoir avant de souscrire.</p>
+          <p><strong style="color:var(--text)">Le cout : 15 a 20% plus cher en moyenne.</strong> Les VE coutent plus cher a reparer — notamment les batteries qui peuvent valoir plusieurs milliers d'euros. Les assureurs repercutent ce risque sur les primes.</p>
+          <p><strong style="color:var(--text)">Les garanties specifiques a verifier :</strong></p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin:12px 0">
+            <div style="display:flex;align-items:flex-start;gap:10px"><span style="color:var(--green);font-size:16px">V</span><span style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Garantie batterie</strong> : verifie si les dommages accidentels a la batterie sont couverts. Certains contrats excluent la degradation naturelle.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><span style="color:var(--green);font-size:16px">V</span><span style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Cable de recharge</strong> : vol ou endommagement du cable doit etre couvert.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><span style="color:var(--green);font-size:16px">V</span><span style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Panne de charge</strong> : certains assureurs proposent une assistance specifique si vous tombez en panne de batterie.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><span style="color:var(--green);font-size:16px">V</span><span style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Valeur agreee</strong> : recommandee pour les VE recents dont la valeur deprecie vite.</span></div>
+          </div>
+          <p><strong style="color:var(--text)">Les meilleurs assureurs VE en 2025 :</strong> Lovys, Direct Assurance et Maif proposent les offres les plus adaptees aux vehicules electriques avec des tarifs competitifs.</p>
+        </div>
+      </div>
+
+      <!-- Article 3 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px">
+        <div style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(244,63,94,0.15));padding:20px 24px;border-bottom:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Actualite - 2 janvier 2025</div>
+          <div style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">Loi Hamon : comment changer d'assurance sans frais en 2025 ?</div>
+          <div style="font-size:13px;color:var(--muted)">Par Camille Richard, Directrice Partenariats</div>
+        </div>
+        <div style="padding:20px 24px">
+          <p>Depuis la loi Hamon de 2015, vous pouvez resilier votre assurance auto a tout moment apres la premiere annee de contrat. Voici comment proceder simplement et sans frais.</p>
+          <p><strong style="color:var(--text)">Les 4 etapes pour changer d'assurance :</strong></p>
+          <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <div style="min-width:28px;height:28px;border-radius:50%;background:rgba(79,156,249,0.15);border:1px solid rgba(79,156,249,0.4);color:var(--accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+              <div style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Comparez les offres</strong> — Utilisez notre comparateur pour trouver la meilleure offre adaptee a votre profil.</div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <div style="min-width:28px;height:28px;border-radius:50%;background:rgba(79,156,249,0.15);border:1px solid rgba(79,156,249,0.4);color:var(--accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+              <div style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Souscrivez le nouveau contrat</strong> — Votre nouvel assureur se charge de toutes les demarches de resiliation a votre place.</div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <div style="min-width:28px;height:28px;border-radius:50%;background:rgba(79,156,249,0.15);border:1px solid rgba(79,156,249,0.4);color:var(--accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+              <div style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Resiliation automatique</strong> — L'ancien assureur est informe et le contrat est resilie dans les 30 jours sans frais.</div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <div style="min-width:28px;height:28px;border-radius:50%;background:rgba(79,156,249,0.15);border:1px solid rgba(79,156,249,0.4);color:var(--accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+              <div style="font-size:14px;color:var(--muted)"><strong style="color:var(--text)">Remboursement du prorata</strong> — Les cotisations payees d'avance vous sont remboursees sous 30 jours.</div>
+            </div>
+          </div>
+          <div style="background:rgba(16,217,160,0.08);border:1px solid rgba(16,217,160,0.2);border-radius:10px;padding:14px;margin-top:12px;font-size:13px;color:var(--green)">
+            V Economie moyenne constatee lors d'un changement d'assurance : <strong>312 euros par an</strong>. Ne restez pas par habitude chez votre assureur actuel !
+          </div>
+        </div>
+      </div>
+
+      <!-- Article 4 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px">
+        <div style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(244,63,94,0.15));padding:20px 24px;border-bottom:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Dossier - 20 decembre 2024</div>
+          <div style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">Jeune conducteur : comment payer moins cher en 2025 ?</div>
+          <div style="font-size:13px;color:var(--muted)">Par Chakir MORALENT, CEO AutoCompare</div>
+        </div>
+        <div style="padding:20px 24px">
+          <p>Les jeunes conducteurs paient en moyenne 2 a 3 fois plus cher que les conducteurs experimentes. Mais il existe des solutions concretes pour reduire significativement cette surprime.</p>
+          <p><strong style="color:var(--text)">La conduite accompagnee (AAC)</strong> est la solution la plus efficace : elle reduit la surprime jeune conducteur de 50% des la premiere annee. Si vous avez entre 15 et 17 ans, commencez l'AAC maintenant.</p>
+          <p><strong style="color:var(--text)">Choisissez le bon vehicule :</strong> La puissance fiscale influence directement la prime. Un vehicule de moins de 6 CV coute 2 a 3 fois moins cher a assurer qu'un vehicule de 10 CV ou plus. Optez pour une petite citadine : Renault Clio, Peugeot 208, Dacia Sandero.</p>
+          <p><strong style="color:var(--text)">Les assureurs les plus competitifs pour les jeunes en 2025 :</strong> Lovys (22 euros/mois), Eurofil (21 euros/mois) et Wilov (18 euros/mois en pay-per-km si vous roulez peu).</p>
+          <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:14px;margin-top:12px;font-size:13px;color:var(--accent2)">
+            💡 La surprime jeune conducteur diminue de 10 a 25% par annee sans sinistre. Apres 3 ans de conduite responsable, vous rejoignez les tarifs standards.
+          </div>
+        </div>
+      </div>
+
+      <button onclick="var e=document.getElementById('ov-blog');if(e){e.style.display='none';document.body.style.overflow='';};document.getElementById('formsec').scrollIntoView({behavior:'smooth'})"
+        style="width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:14px;border-radius:var(--r);font-family:var(--fh);font-size:15px;font-weight:700;cursor:pointer">
+        Comparer mon assurance maintenant →
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+window._sort = 'price';
+window._filter = 'tous';
+window._budget = 70;
+
+var D=[
+  {n:'Wilov',pr:18,sav:480,r:4.4,col:'#ff6b35',logo:'WIL',type:'digital',f:['Au tiers','Bris de glace']},
+  {n:'Eurofil',pr:21,sav:450,r:4.1,col:'#1565c0',logo:'EUF',type:'digital',f:['Au tiers','Bris de glace','Assistance']},
+  {n:'Lovys',pr:22,sav:420,r:4.5,col:'#e91e8c',logo:'LOV',type:'digital',f:['Tiers etendu','Bris de glace','Vol incendie']},
+  {n:'Amaguiz',pr:25,sav:340,r:4.2,col:'#2196f3',logo:'AMA',type:'digital',f:['Tiers etendu','Vol incendie','Assistance 0km']},
+  {n:'April',pr:27,sav:310,r:4.1,col:'#2d6a4f',logo:'APR',type:'digital',f:['Tiers etendu','Vol incendie','Assistance 0km']},
+  {n:'Direct Assurance',pr:29,sav:210,r:4.3,col:'#0f4c75',logo:'DA',type:'digital',f:['Tous risques','Bris de glace','Vol incendie']},
+  {n:'Matmut',pr:31,sav:245,r:4.4,col:'#7c1d3f',logo:'MAT',type:'mutuelle',f:['Tous risques','Bris de glace','Assistance 0km','Vol incendie']},
+  {n:'GMF',pr:33,sav:270,r:4.5,col:'#283593',logo:'GMF',type:'mutuelle',f:['Tous risques','Assistance 0km','Protection conducteur']},
+  {n:'Macif',pr:34,sav:280,r:4.5,col:'#1a4731',logo:'MACIF',type:'mutuelle',f:['Tous risques','Bris de glace','Assistance 0km']},
+  {n:'Groupama',pr:36,sav:265,r:4.3,col:'#006b3f',logo:'GRP',type:'mutuelle',f:['Tous risques','Assistance 0km','Protection conducteur']},
+  {n:'Maif',pr:38,sav:347,r:4.8,col:'#1e3a5f',logo:'MAIF',type:'mutuelle',f:['Tous risques','Bris de glace','Assistance 0km','Protection conducteur'],best:true},
+  {n:'Generali',pr:40,sav:200,r:4.0,col:'#c8102e',logo:'GEN',type:'classique',f:['Tous risques','Bris de glace','Assistance 0km']},
+  {n:'BNP Cardif',pr:41,sav:185,r:4.0,col:'#009966',logo:'BNP',type:'classique',f:['Tous risques','Bris de glace','Assistance 0km']},
+  {n:'AXA',pr:42,sav:180,r:4.2,col:'#00008f',logo:'AXA',type:'classique',f:['Tous risques','Bris de glace','Assistance 0km','Garantie valeur']},
+  {n:'Allianz',pr:45,sav:155,r:4.1,col:'#003781',logo:'ALLZ',type:'classique',f:['Tous risques','Assistance 0km','Vehicule remplacement']},
+  {n:'SwissLife',pr:48,sav:140,r:4.3,col:'#c62828',logo:'SWL',type:'classique',f:['Tous risques','Assistance 0km','Garantie valeur','Vehicule remplacement']}
+];
+
+window._renderOffres = function(){
+  var O = document.getElementById('olist');
+  if(!O) return;
+  O.innerHTML = '';
+
+  var list = D.filter(function(o){ return o.pr <= window._budget; });
+
+  if(window._filter !== 'tous'){
+    list = list.filter(function(o){
+      if(window._filter === 'digital')  return o.type === 'digital';
+      if(window._filter === 'mutuelle') return o.type === 'mutuelle';
+      if(window._filter === 'tiers')    return o.f.some(function(f){return f==='Au tiers';}) && !o.f.some(function(f){return f==='Tous risques'||f==='Tiers etendu';});
+      if(window._filter === 'etendu')   return o.f.some(function(f){return f==='Tiers etendu';});
+      if(window._filter === 'complet')  return o.f.some(function(f){return f==='Tous risques';});
+      return true;
+    });
+  }
+
+  if(window._sort === 'price') list.sort(function(a,b){return a.pr-b.pr;});
+  if(window._sort === 'guar')  list.sort(function(a,b){return b.f.length-a.f.length;});
+  if(window._sort === 'rate')  list.sort(function(a,b){return b.r-a.r;});
+  if(window._sort === 'save')  list.sort(function(a,b){return b.sav-a.sav;});
+
+  document.getElementById('ocount').textContent = list.length;
+
+  if(list.length === 0){
+    O.innerHTML = '<div style="text-align:center;padding:44px;color:var(--muted)">Aucune offre pour ce filtre. Augmentez votre budget ou changez le filtre.</div>';
+    return;
+  }
+
+  list.forEach(function(o){
+    var card = document.createElement('div');
+    card.className = 'oc' + (o.best ? ' best' : '');
+    if(o.best){
+      var bk = document.createElement('div');
+      bk.className = 'bbadge';
+      bk.textContent = 'Meilleure offre';
+      card.appendChild(bk);
+    }
+    var lg = document.createElement('div');
+    lg.className = 'ilogo';
+    lg.style.cssText = 'background:'+o.col+'20;color:'+o.col+';border:1px solid '+o.col+'40';
+    lg.textContent = o.logo;
+    card.appendChild(lg);
+
+    var inf = document.createElement('div');
+    var tags = o.f.map(function(f){
+      return '<span style="font-size:11px;padding:3px 10px;border-radius:50px;background:rgba(16,217,160,.07);border:1px solid rgba(16,217,160,.3);color:#10d9a0">V '+f+'</span>';
+    }).join(' ');
+    inf.innerHTML = '<div class="on2">'+o.n+'</div><div class="opl">'+o.pr+' euros/mois - '+o.r+'/5</div><div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px">'+tags+'</div>';
+    card.appendChild(inf);
+
+    var pr = document.createElement('div');
+    pr.className = 'op';
+    pr.innerHTML = '<div class="pa">'+o.pr+'</div><div class="pp">euros/mois</div><div class="pan">'+(o.pr*12)+' euros/an</div><div class="ps">Economie: '+o.sav+' euros/an</div>';
+
+    var bb = document.createElement('div');
+    bb.className = 'obts';
+    var bt = document.createElement('button');
+    bt.className = 'obt' + (o.best ? ' prim' : '');
+    bt.textContent = o.best ? 'Choisir cette offre' : 'Voir le detail';
+    bt.setAttribute('data-n',o.n); bt.setAttribute('data-pr',o.pr);
+    bt.setAttribute('data-sav',o.sav); bt.setAttribute('data-r',o.r);
+    bt.setAttribute('data-col',o.col); bt.setAttribute('data-f',o.f.join('|'));
+    bt.addEventListener('click', function(){
+      var dn=this.getAttribute('data-n'), dpr=this.getAttribute('data-pr');
+      var dsav=this.getAttribute('data-sav'), dr=this.getAttribute('data-r');
+      var dc=this.getAttribute('data-col'), df=this.getAttribute('data-f');
+      var ov=document.getElementById('ov-detail'), det=document.getElementById('detcontent');
+      if(!ov||!det) return;
+      var ftags=df.split('|').map(function(f){return '<span style="font-size:12px;padding:6px 14px;border-radius:50px;background:rgba(16,217,160,.08);border:1px solid rgba(16,217,160,.3);color:#10d9a0">V '+f+'</span>';}).join(' ');
+      det.innerHTML=
+        '<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px"><div style="width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;background:'+dc+'20;color:'+dc+';border:1px solid '+dc+'40">'+dn.substring(0,4)+'</div>'
+        +'<div><div style="font-size:22px;font-weight:800">'+dn+'</div><div style="color:#8a96b0;font-size:13px">Assurance automobile</div></div></div>'
+        +'<div style="font-size:44px;font-weight:800;color:#10d9a0">'+dpr+' <span style="font-size:18px;color:#8a96b0">euros/mois</span></div>'
+        +'<div style="color:#8a96b0;margin-bottom:20px">'+(dpr*12)+' euros/an - Economie: '+dsav+' euros/an</div>'
+        +'<div style="color:#f59e0b;font-size:18px;margin-bottom:24px">'+dr+'/5</div>'
+        +'<div style="font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)">Garanties incluses</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">'+ftags+'</div>'
+        +'<div style="font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)">Informations importantes</div>'
+        +'<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">'
+        +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Franchise</span><span style="font-weight:600">300 euros</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Resiliation</span><span style="font-weight:600">Loi Hamon - a tout moment</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Paiement</span><span style="font-weight:600">Mensuel ou annuel (-5%)</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Assistance</span><span style="font-weight:600">24h/24 - 7j/7</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:10px"><span style="color:#8a96b0">Remboursement sinistre</span><span style="font-weight:600">Sous 30 jours</span></div></div>'
+        +'<div style="font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)">Avis clients</div>'
+        +'<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">'
+        +'<div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong>Marie T.</strong><span style="color:#8a96b0;font-size:12px">mars 2025</span></div><div style="color:#8a96b0;font-size:13px">Excellent service, remboursement rapide. Je recommande vivement.</div></div>'
+        +'<div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong>Lucas B.</strong><span style="color:#8a96b0;font-size:12px">janv 2025</span></div><div style="color:#8a96b0;font-size:13px">Bon rapport qualite-prix. Assistance 0km tres utile.</div></div></div>'
+        +'<button id="btn-close-detail" style="width:100%;background:linear-gradient(135deg,#4f9cf9,#7c3aed);border:none;color:#fff;padding:14px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">Souscrire chez '+dn+'</button>';
+      document.getElementById('btn-close-detail').addEventListener('click', function(){
+        var sov=document.getElementById('ov-souscription');
+        var sc=document.getElementById('souscontent');
+        document.getElementById('ov-detail').style.display='none';
+        if(sov&&sc){
+          sc.innerHTML='<div style="text-align:center;margin-bottom:20px"><div style="font-size:48px">&#127881;</div><div style="font-family:var(--fh);font-size:20px;font-weight:800;margin:12px 0">Excellent choix !</div><div style="color:#8a96b0;font-size:14px">Vous avez selectionne <strong style="color:#f0f4ff">'+dn+'</strong></div></div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px"><input type="text" id="sub-name" placeholder="Prenom et nom" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none"><input type="email" id="sub-email" placeholder="votre@email.fr" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none"><input type="tel" id="sub-phone" placeholder="Telephone (optionnel)" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none"></div><div style="font-size:12px;color:#8a96b0;margin-bottom:14px">Un conseiller '+dn+' vous contactera sous 24h.</div><button id="btn-confirmer" style="width:100%;background:linear-gradient(135deg,#4f9cf9,#7c3aed);border:none;color:#fff;padding:14px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">Finaliser ma souscription</button>';
+          sov.style.display='block'; sov.scrollTop=0; document.body.style.overflow='hidden';
+          document.getElementById('btn-confirmer').addEventListener('click',function(){
+            var nm=document.getElementById('sub-name').value;
+            var em=document.getElementById('sub-email').value;
+            if(!nm||!em){if(!nm)document.getElementById('sub-name').style.borderColor='#f43f5e';if(!em)document.getElementById('sub-email').style.borderColor='#f43f5e';return;}
+            sc.innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:56px">&#10003;</div><div style="font-family:var(--fh);font-size:22px;font-weight:800;margin:12px 0">Demande envoyee !</div><div style="color:#8a96b0;line-height:1.7">Un conseiller <strong style="color:#f0f4ff">'+dn+'</strong> vous contactera sous 24h a <strong style="color:#4f9cf9">'+em+'</strong>.</div></div>';
+          });
+        }
+      });
+      ov.style.display='block'; ov.scrollTop=0; document.body.style.overflow='hidden';
+    });
+    bb.appendChild(bt); bb.appendChild(btCmp); pr.appendChild(bb); card.appendChild(pr);
+    O.appendChild(card);
+  });
+};
+</script>
+
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border2);padding:18px 48px;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">🍪 Cookies et confidentialite</div>
+    <div style="font-size:13px;color:var(--muted)">Nous utilisons des cookies pour ameliorer votre experience. Aucun cookie publicitaire. Conformite RGPD garantie.</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-shrink:0">
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('cookies','refused')"
+      style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:9px 18px;border-radius:50px;font-size:13px;cursor:pointer">Refuser</button>
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('cookies','accepted')"
+      style="background:var(--accent);border:none;color:#fff;padding:9px 20px;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer">Accepter</button>
+  </div>
+</div>
+<script>
+if(!localStorage.getItem('cookies')){
+  document.getElementById('cookie-banner').style.display='flex';
+}
+</script>
+
+<style>
+body.light-mode{
+  --bg:#f0f4ff;--surface:#ffffff;--surface2:#e8edf8;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --text:#0a0f1e;--muted:#5a6480;
+}
+body.light-mode nav{background:rgba(240,244,255,0.95)}
+body.light-mode .fi select,body.light-mode .fi input{background:#e8edf8;color:#0a0f1e}
+body.light-mode .fc,body.light-mode .oc,body.light-mode .fcard,body.light-mode .simres{background:#ffffff}
+body.light-mode .chatbub,body.light-mode .ovbox{background:#ffffff}
+</style>
+<script>
+window._toggleTheme = function(){
+  var isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+};
+if(localStorage.getItem('theme')==='light'){
+  document.body.classList.add('light-mode');
+  var tb = document.getElementById('theme-btn');
+  if(tb) tb.textContent = '☀️';
+}
+</script>
+
+<script>
+// Loading bar animation
+window._animateLoading = function(){
+  var bar = document.getElementById('prog-bar');
+  var label = document.getElementById('prog-label');
+  if(!bar || !label) return;
+  var assureurs = ['Wilov','Eurofil','Lovys','Amaguiz','April','Direct Assurance','Matmut','GMF','Macif','Groupama','Maif','Generali','BNP Cardif','AXA','Allianz','SwissLife'];
+  var i = 0;
+  var interval = setInterval(function(){
+    if(i >= assureurs.length){ clearInterval(interval); return; }
+    var pct = Math.round((i+1)/assureurs.length*100);
+    bar.style.width = pct + '%';
+    label.textContent = assureurs[i] + '... (' + (i+1) + '/' + assureurs.length + ')';
+    i++;
+  }, 110);
+};
+
+// Compare côte à côte
+window._cmpList = [];
+window._toggleCompare = function(name, pr, sav, r, col, logo, f){
+  var idx = window._cmpList.findIndex(function(o){return o.n===name;});
+  if(idx > -1){
+    window._cmpList.splice(idx,1);
+  } else {
+    if(window._cmpList.length >= 3){ alert('Maximum 3 offres a comparer.'); return; }
+    window._cmpList.push({n:name,pr:pr,sav:sav,r:r,col:col,logo:logo,f:f.split('|')});
+  }
+  // Update chips
+  var chips = document.getElementById('cmp-chips');
+  var bar = document.getElementById('cmp-bar');
+  if(!chips || !bar) return;
+  if(window._cmpList.length === 0){
+    bar.style.display = 'none';
+  } else {
+    bar.style.display = 'flex';
+    chips.innerHTML = window._cmpList.map(function(o){
+      return '<div style="background:var(--surface2);border:1px solid var(--accent);color:var(--accent);padding:5px 12px;border-radius:50px;font-size:13px;display:flex;align-items:center;gap:8px">'
+        + o.n + ' ' + o.pr + 'E/m'
+        + '<button onclick="window._toggleCompare(''+o.n+'','+o.pr+','+o.sav+','+o.r+',''+o.col+'',''+o.logo+'',''+o.f.join('|')+'')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">x</button>'
+        + '</div>';
+    }).join('');
+  }
+  window._renderOffres();
+};
+
+window._ouvrirComparaison = function(){
+  var L = window._cmpList;
+  if(L.length < 2){ alert('Selectionnez au moins 2 offres.'); return; }
+  var GKEYS = ['Au tiers','Tiers etendu','Tous risques','Bris de glace','Vol incendie','Assistance 0km','Protection conducteur','Vehicule remplacement','Garantie valeur'];
+  var hdrs = L.map(function(o){
+    return '<th style="text-align:center;padding:12px 10px;border-bottom:2px solid var(--border2);font-family:var(--fh);font-size:13px">'
+      + '<div style="width:40px;height:40px;border-radius:10px;background:'+o.col+'20;color:'+o.col+';border:1px solid '+o.col+'40;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;margin:0 auto 6px">'+o.logo+'</div>'
+      + o.n + '<div style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--accent)">'+o.pr+'E/m</div></th>';
+  }).join('');
+  var rows = GKEYS.map(function(g){
+    return '<tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted)">'+g+'</td>'
+      + L.map(function(o){
+          var inc = o.f.some(function(f){return f.toLowerCase().indexOf(g.toLowerCase())!==-1;});
+          return '<td style="text-align:center;padding:9px;border-bottom:1px solid var(--border);font-size:16px;color:'+(inc?'var(--green)':'var(--muted)')+'">'+( inc?'V':'X')+'</td>';
+        }).join('') + '</tr>';
+  }).join('');
+  var extras = '<tr><td style="padding:9px 10px;font-size:13px;color:var(--muted)">Note clients</td>'
+    + L.map(function(o){return '<td style="text-align:center;font-weight:600;color:#f59e0b">'+o.r+'/5</td>';}).join('') + '</tr>'
+    + '<tr><td style="padding:9px 10px;font-size:13px;color:var(--muted)">Economie/an</td>'
+    + L.map(function(o){return '<td style="text-align:center;font-weight:600;color:var(--green)">'+o.sav+' euros</td>';}).join('') + '</tr>';
+  document.getElementById('cmp-content').innerHTML =
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">'
+    + '<thead><tr><th style="text-align:left;padding:10px;border-bottom:2px solid var(--border2);color:var(--muted);font-size:12px">Garantie</th>'+hdrs+'</tr></thead>'
+    + '<tbody>'+rows+extras+'</tbody></table></div>';
+  var ov = document.getElementById('ov-cmp');
+  if(ov){ ov.style.display='block'; ov.scrollTop=0; document.body.style.overflow='hidden'; }
+};
+</script>
+
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// SYSTÈME D'AFFILIATION AUTOCOMPARE
+// Remplacez les URLs par vos vrais liens Awin/Effiliation
+// ═══════════════════════════════════════════════════════════
+
+var AFFILIATION = {
+  'Wilov':            { url: 'https://www.awin1.com/cread.php?awinmid=22696&awinaffid=2876937&clickref=', commission: 45 },
+  'Eurofil':          { url: 'https://www.awin1.com/cread.php?awinmid=21842&awinaffid=2876937&clickref=', commission: 55 },
+  'Lovys':            { url: 'https://www.effiliation.com/servlet/effi.redir?awinmid=34156&awinaffid=2876937&clickref=', commission: 60 },
+  'Amaguiz':          { url: 'https://www.awin1.com/cread.php?awinmid=18743&awinaffid=2876937&clickref=', commission: 50 },
+  'April':            { url: 'https://www.awin1.com/cread.php?awinmid=15632&awinaffid=2876937&clickref=', commission: 65 },
+  'Direct Assurance': { url: 'https://www.awin1.com/cread.php?awinmid=12934&awinaffid=2876937&clickref=', commission: 70 },
+  'Matmut':           { url: 'https://www.effiliation.com/servlet/effi.redir?awinmid=28451&awinaffid=2876937&clickref=', commission: 80 },
+  'GMF':              { url: 'https://www.awin1.com/cread.php?awinmid=19823&awinaffid=2876937&clickref=', commission: 75 },
+  'Macif':            { url: 'https://www.effiliation.com/servlet/effi.redir?awinmid=31205&awinaffid=2876937&clickref=', commission: 85 },
+  'Groupama':         { url: 'https://www.awin1.com/cread.php?awinmid=25467&awinaffid=2876937&clickref=', commission: 90 },
+  'Maif':             { url: 'https://www.effiliation.com/servlet/effi.redir?awinmid=33891&awinaffid=2876937&clickref=', commission: 95 },
+  'Generali':         { url: 'https://www.awin1.com/cread.php?awinmid=27634&awinaffid=2876937&clickref=', commission: 85 },
+  'BNP Cardif':       { url: 'https://www.awin1.com/cread.php?awinmid=29145&awinaffid=2876937&clickref=', commission: 80 },
+  'AXA':              { url: 'https://www.awin1.com/cread.php?awinmid=11234&awinaffid=2876937&clickref=', commission: 100 },
+  'Allianz':          { url: 'https://www.awin1.com/cread.php?awinmid=16789&awinaffid=2876937&clickref=', commission: 110 },
+  'SwissLife':        { url: 'https://www.awin1.com/cread.php?awinmid=24567&awinaffid=2876937&clickref=', commission: 120 }
+};
+
+// Générer un ID de session unique pour le tracking
+var SESSION_ID = 'AC_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+
+// Données de conversion pour analytics
+var CONVERSIONS = JSON.parse(localStorage.getItem('ac_conversions') || '[]');
+
+// Fonction principale de tracking et redirection
+window._trackAndRedirect = function(assureurName, prix) {
+  var aff = AFFILIATION[assureurName];
+  if(!aff) return;
+
+  // 1. Enregistrer le clic
+  var clickData = {
+    id: SESSION_ID,
+    assureur: assureurName,
+    prix: prix,
+    timestamp: new Date().toISOString(),
+    page: window.location.href,
+    vehicule: (document.getElementById('brand') ? document.getElementById('brand').value : '') + ' ' +
+              (document.getElementById('model') ? document.getElementById('model').value : ''),
+    profil: document.getElementById('profile') ? document.getElementById('profile').value : ''
+  };
+
+  CONVERSIONS.push(clickData);
+  localStorage.setItem('ac_conversions', JSON.stringify(CONVERSIONS.slice(-50)));
+
+  // 2. Envoyer à Formspree pour tracking
+  fetch('https://formspree.io/f/meevbjbv', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({
+      _subject: 'Clic affiliation - ' + assureurName,
+      Type: 'CLIC_AFFILIATION',
+      Assureur: assureurName,
+      Prix: prix + ' euros/mois',
+      Session: SESSION_ID,
+      Vehicule: clickData.vehicule,
+      Date: new Date().toLocaleDateString('fr-FR'),
+      Commission_estimee: aff.commission + ' euros'
+    })
+  }).catch(function(){});
+
+  // 3. Afficher modal de souscription avec lien affilié
+  var sov = document.getElementById('ov-souscription');
+  var sc  = document.getElementById('souscontent');
+  if(!sov || !sc) return;
+
+  var affUrl = aff.url + SESSION_ID;
+
+  sc.innerHTML =
+    '<div style="text-align:center;margin-bottom:24px">'
+    + '<div style="font-size:48px;margin-bottom:12px">&#127881;</div>'
+    + '<div style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:8px">Excellent choix !</div>'
+    + '<div style="color:#8a96b0;font-size:14px">Vous allez souscrire chez <strong style="color:#f0f4ff">' + assureurName + '</strong></div>'
+    + '</div>'
+    + '<div style="background:rgba(16,217,160,0.08);border:1px solid rgba(16,217,160,0.3);border-radius:12px;padding:16px;margin-bottom:20px">'
+    + '<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:#8a96b0">Prix mensuel</span><span style="color:#10d9a0;font-weight:700;font-size:18px">' + prix + ' euros/mois</span></div>'
+    + '<div style="display:flex;justify-content:space-between"><span style="color:#8a96b0">Prix annuel</span><span style="font-weight:600">' + (prix*12) + ' euros/an</span></div>'
+    + '</div>'
+    + '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">'
+    + '<input type="text" id="sub-name" placeholder="Votre prenom et nom" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none">'
+    + '<input type="email" id="sub-email" placeholder="votre@email.fr" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none">'
+    + '<input type="tel" id="sub-phone" placeholder="Telephone (optionnel)" style="width:100%;background:#1a2235;border:1px solid rgba(255,255,255,.15);border-radius:14px;color:#f0f4ff;padding:13px 16px;font-size:15px;outline:none">'
+    + '</div>'
+    + '<div style="font-size:12px;color:#8a96b0;margin-bottom:16px;line-height:1.6">'
+    + 'En cliquant, vous serez redirige vers le site officiel de ' + assureurName + ' pour finaliser votre souscription. '
+    + 'Commission estimee pour AutoCompare : <strong style="color:#f0f4ff">' + aff.commission + ' euros</strong> si vous souscrivez.'
+    + '</div>'
+    + '<button id="btn-aff-go" style="width:100%;background:linear-gradient(135deg,#4f9cf9,#7c3aed);border:none;color:#fff;padding:15px;border-radius:14px;font-family:var(--fh);font-size:16px;font-weight:700;cursor:pointer">'
+    + 'Souscrire chez ' + assureurName + ' &#8594;'
+    + '</button>'
+    + '<div style="text-align:center;margin-top:10px;font-size:12px;color:#8a96b0">Vous serez redirige vers ' + assureurName + '.fr en toute securite 🔒</div>';
+
+  // Bouton de souscription avec redirection affiliée
+  document.getElementById('btn-aff-go').addEventListener('click', function(){
+    var nm = document.getElementById('sub-name').value;
+    var em = document.getElementById('sub-email').value;
+    if(!nm || !em){
+      if(!nm) document.getElementById('sub-name').style.borderColor='#f43f5e';
+      if(!em) document.getElementById('sub-email').style.borderColor='#f43f5e';
+      return;
+    }
+    // Envoyer lead par email
+    fetch('https://formspree.io/f/meevbjbv', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        _subject: 'LEAD - ' + assureurName + ' - ' + nm,
+        _replyto: em,
+        Type: 'SOUSCRIPTION',
+        Assureur: assureurName,
+        Prix: prix + ' euros/mois',
+        Nom: nm,
+        Email: em,
+        Tel: document.getElementById('sub-phone').value || 'Non renseigne',
+        Session: SESSION_ID,
+        Vehicule: clickData.vehicule,
+        Commission_estimee: aff.commission + ' euros',
+        Date: new Date().toLocaleDateString('fr-FR')
+      })
+    }).catch(function(){});
+
+    // Afficher confirmation puis rediriger
+    sc.innerHTML =
+      '<div style="text-align:center;padding:20px">'
+      + '<div style="font-size:56px;margin-bottom:16px">&#10003;</div>'
+      + '<div style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:10px">Redirection en cours...</div>'
+      + '<div style="color:#8a96b0;margin-bottom:20px">Vous allez etre redirige vers <strong style="color:#f0f4ff">' + assureurName + '</strong></div>'
+      + '<div style="background:rgba(79,156,249,0.1);border:1px solid rgba(79,156,249,0.3);border-radius:10px;padding:12px;font-size:13px;color:var(--accent)">&#128274; Connexion securisee SSL vers ' + assureurName + '.fr</div>'
+      + '</div>';
+
+    // Redirection après 2 secondes
+    setTimeout(function(){
+      window.open(affUrl, '_blank');
+    }, 2000);
+  });
+
+  sov.style.display = 'block';
+  sov.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+};
+
+// ═══════════════════════════════════════
+// TABLEAU DE BORD ANALYTICS (admin)
+// Accessible via: tapez "admin" dans le chat
+// ═══════════════════════════════════════
+window._showAdminDashboard = function(){
+  var total = CONVERSIONS.length;
+  var today = CONVERSIONS.filter(function(c){
+    return c.timestamp.startsWith(new Date().toISOString().split('T')[0]);
+  }).length;
+  var estRevenu = CONVERSIONS.reduce(function(sum,c){
+    var aff = AFFILIATION[c.assureur];
+    return sum + (aff ? aff.commission * 0.1 : 0); // estimation 10% conversion
+  }, 0);
+
+  var html = '<div style="font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:20px">Tableau de bord Admin</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">'
+    + '<div style="background:rgba(79,156,249,.1);border:1px solid rgba(79,156,249,.3);border-radius:12px;padding:16px;text-align:center"><div style="font-size:28px;font-weight:800;color:var(--accent)">'+total+'</div><div style="color:var(--muted);font-size:13px">Clics total</div></div>'
+    + '<div style="background:rgba(16,217,160,.1);border:1px solid rgba(16,217,160,.3);border-radius:12px;padding:16px;text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+today+'</div><div style="color:var(--muted);font-size:13px">Clics aujourd'hui</div></div>'
+    + '<div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:16px;text-align:center"><div style="font-size:28px;font-weight:800;color:var(--amber)">'+Math.round(estRevenu)+'E</div><div style="color:var(--muted);font-size:13px">Revenus estimes</div></div>'
+    + '<div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:12px;padding:16px;text-align:center"><div style="font-size:28px;font-weight:800;color:var(--accent2)">'+(total>0?Math.round(estRevenu/total*100/100*1000)/10+'%':'0%')+'</div><div style="color:var(--muted);font-size:13px">Taux conversion</div></div>'
+    + '</div>'
+    + '<div style="font-weight:700;margin-bottom:10px;color:var(--text)">Derniers clics</div>'
+    + '<div style="display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto">'
+    + (CONVERSIONS.slice(-5).reverse().map(function(cv){
+        return '<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between"><span style="color:var(--text);font-size:13px">'+cv.assureur+'</span><span style="color:var(--muted);font-size:12px">'+cv.timestamp.slice(0,10)+'</span></div>';
+      }).join('') || '<div style="color:var(--muted);font-size:13px">Aucun clic enregistre</div>')
+    + '</div>';
+
+  var ov = document.getElementById('ov-detail');
+  var det = document.getElementById('detcontent');
+  if(ov && det){
+    det.innerHTML = html;
+    ov.style.display='block'; ov.scrollTop=0; document.body.style.overflow='hidden';
+  }
+};
+
+// Commande admin dans le chat
+var _origSendChat = window.sendChat || function(){};
+</script>
+
+</body>
+</html>
